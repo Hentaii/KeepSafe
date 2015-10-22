@@ -27,7 +27,7 @@ public class AtyGuide extends AppCompatActivity {
         setContentView(R.layout.activity_aty_guide);
         mTvVersion = (TextView) findViewById(R.id.tv_ver);
         mTvVersion.append(getVersionName());
-        cheakVersion();
+        Net.connect();
     }
 
     private String getVersionName() {
@@ -52,32 +52,7 @@ public class AtyGuide extends AppCompatActivity {
         return 0;
     }
 
-    public void cheakVersion() {
-        new Thread(){
-            @Override
-            public void run() {
-                HttpURLConnection conn = null;
-                try {
-                    URL url = new URL("http://113.251.160.166:8080/update.json");
-                    conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(5000);
-                    conn.setReadTimeout(5000);
-                    conn.connect();
-                    int respon = conn.getResponseCode();
-                    if (respon == 200) {
-                        InputStream inputStream = conn.getInputStream();
-                        String result = StreamUtils.readFromStream(inputStream);
-                        System.out.print(result);
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
+
 }
 
 
