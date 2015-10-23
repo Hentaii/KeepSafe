@@ -1,5 +1,6 @@
 package gan.keepsafe.atys;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,35 +45,8 @@ public class AtyGuide extends AppCompatActivity {
         cheakVersion();
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MyConfig.UPDATE_DIALOG: {
-                    showDialog();
-                    break;
-                }
-                case MyConfig.JSON_ERROR: {
-                    Toast.makeText(AtyGuide.this, "Json has wrong", Toast.LENGTH_LONG).show();
-                    enterHome();
-                    break;
-                }
-                case MyConfig.URL_ERROR: {
-                    Toast.makeText(AtyGuide.this, "URL has wrong", Toast.LENGTH_LONG).show();
-                    enterHome();
-                    break;
-                }
-                case MyConfig.NET_ERROR: {
-                    Toast.makeText(AtyGuide.this, "Net has wrong", Toast.LENGTH_LONG).show();
-                    enterHome();
-                    break;
-                }
+    private MyHandler mHandler = new MyHandler(this);
 
-            }
-
-
-        }
-    };
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -101,7 +76,7 @@ public class AtyGuide extends AppCompatActivity {
 
     private void download() {
 
-        
+
     }
 
     private String getVersionName() {
@@ -186,5 +161,40 @@ public class AtyGuide extends AppCompatActivity {
         }).start();
 
     }
+    static class MyHandler extends Handler {
+        WeakReference<AtyGuide> mActivity;
 
-}
+        MyHandler(AtyGuide activity) {
+            mActivity = new WeakReference<AtyGuide>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            AtyGuide theActivity = mActivity.get();
+                switch (msg.what) {
+                    case MyConfig.UPDATE_DIALOG: {
+                        theActivity.showDialog();
+                        break;
+                    }
+                    case MyConfig.JSON_ERROR: {
+                        Toast.makeText(theActivity.getApplicationContext(), "Json has wrong", Toast.LENGTH_LONG).show();
+                        theActivity.enterHome();
+                        break;
+                    }
+                    case MyConfig.URL_ERROR: {
+                        Toast.makeText(theActivity.getApplicationContext(), "URL has wrong", Toast.LENGTH_LONG).show();
+                        theActivity.enterHome();
+                        break;
+                    }
+                    case MyConfig.NET_ERROR: {
+                        Toast.makeText(theActivity.getApplicationContext(), "Net has wrong", Toast.LENGTH_LONG).show();
+                        theActivity.enterHome();
+                        break;
+                    }
+
+                }
+            }
+        }
+    }
+
+
