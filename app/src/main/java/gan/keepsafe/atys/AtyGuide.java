@@ -22,15 +22,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
 import gan.keepsafe.utils.StreamUtils;
 
 public class AtyGuide extends AppCompatActivity {
-    private static final int UPDATE_DIALOG = 1;
-    private static final int ENTER_HOME = 2;
-    private static final int JSON_ERROR = 3;
-    private static final int URL_ERROR = 4;
-    private static final int NET_ERROR = 5;
+
     private TextView mTvVersion;
     private String mVersionName;
     private int mVersionCode;
@@ -50,21 +47,21 @@ public class AtyGuide extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case UPDATE_DIALOG: {
+                case MyConfig.UPDATE_DIALOG: {
                     showDialog();
                     break;
                 }
-                case JSON_ERROR: {
+                case MyConfig.JSON_ERROR: {
                     Toast.makeText(AtyGuide.this, "Json has wrong", Toast.LENGTH_LONG).show();
                     enterHome();
                     break;
                 }
-                case URL_ERROR: {
+                case MyConfig.URL_ERROR: {
                     Toast.makeText(AtyGuide.this, "URL has wrong", Toast.LENGTH_LONG).show();
                     enterHome();
                     break;
                 }
-                case NET_ERROR: {
+                case MyConfig.NET_ERROR: {
                     Toast.makeText(AtyGuide.this, "Net has wrong", Toast.LENGTH_LONG).show();
                     enterHome();
                     break;
@@ -103,6 +100,7 @@ public class AtyGuide extends AppCompatActivity {
     }
 
     private void download() {
+
         
     }
 
@@ -136,7 +134,7 @@ public class AtyGuide extends AppCompatActivity {
                 HttpURLConnection conn = null;
                 Message msg = Message.obtain();
                 try {
-                    URL url = new URL("http://113.251.160.166:8080/update.json");
+                    URL url = new URL(MyConfig.JSON_URL);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.setConnectTimeout(5000);
@@ -153,21 +151,21 @@ public class AtyGuide extends AppCompatActivity {
                             mDescription = jsonObject.getString("description");
                             mDownloadUrl = jsonObject.getString("downloadUrl");
                             if (mVersionCode > getVersionCode()) {
-                                msg.what = UPDATE_DIALOG;
+                                msg.what = MyConfig.UPDATE_DIALOG;
                             } else {
-                                msg.what = ENTER_HOME;
+                                msg.what = MyConfig.ENTER_HOME;
                             }
                         } catch (JSONException e) {
-                            msg.what = JSON_ERROR;
+                            msg.what = MyConfig.JSON_ERROR;
                             e.printStackTrace();
                         }
                     }
 
                 } catch (MalformedURLException e) {
-                    msg.what = URL_ERROR;
+                    msg.what = MyConfig.URL_ERROR;
                     e.printStackTrace();
                 } catch (IOException e) {
-                    msg.what = NET_ERROR;
+                    msg.what = MyConfig.NET_ERROR;
                     e.printStackTrace();
                 } finally {
                     Long mEndTime = System.currentTimeMillis();
