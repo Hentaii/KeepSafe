@@ -4,36 +4,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
 import gan.keepsafe.R;
 
 public class AtyHome extends AppCompatActivity {
 
+    private GridView mGvList;
+
+    private String[] mItem = new String[]{"手机防盗", "通讯卫士", "软件管理", "进程管理",
+            "流量统计", "手机杀毒", "缓存清理", "高级工具", "设置中心" };
+    private int[] mPics = new int[]{R.drawable.home_safe,
+            R.drawable.home_callmsgsafe, R.drawable.home_apps,
+            R.drawable.home_taskmanager, R.drawable.home_netmanager,
+            R.drawable.home_trojan, R.drawable.home_sysoptimize,
+            R.drawable.home_tools, R.drawable.home_settings};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aty_home);
+        mGvList = (GridView) findViewById(R.id.gv_list);
+        mGvList.setAdapter(new AtyHomeAdapter(this,mItem,mPics));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_aty_home, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
