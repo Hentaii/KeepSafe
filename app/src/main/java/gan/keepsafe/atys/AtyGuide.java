@@ -6,17 +6,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -31,16 +41,19 @@ import gan.keepsafe.utils.StreamUtils;
 public class AtyGuide extends AppCompatActivity {
 
     private TextView mTvVersion;
+    private TextView mTvProgress;
     private String mVersionName;
     private int mVersionCode;
     private String mDescription;
     private String mDownloadUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aty_guide);
         mTvVersion = (TextView) findViewById(R.id.tv_ver);
+        mTvProgress = (TextView) findViewById(R.id.tv_progress);
         mTvVersion.append(getVersionName());
         cheakVersion();
     }
@@ -65,18 +78,59 @@ public class AtyGuide extends AppCompatActivity {
                 enterHome();
             }
         });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                enterHome();
+            }
+        });
         builder.show();
     }
 
     private void enterHome() {
-        Intent intent = new Intent(this,AtyHome.class);
+        Intent intent = new Intent(this, AtyHome.class);
         startActivity(intent);
         finish();
     }
 
     private void download() {
 
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String target = Environment.getExternalStorageDirectory() + "/update.apk";
+            mTvProgress.setVisibility(View.VISIBLE);
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.download(mDownloadUrl, target, new RequestCallBack<File>() {
+                @Override
+                public void onLoading(long total, long current, boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+                    mTvProgress.setText("下载进度" + current / total * 100 + "%");
+                }
 
+                @Override
+                public void onSuccess(ResponseInfo<File> responseInfo) {
+                    Toast.makeText(AtyGuide.this, "下载成功", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.setDataAndType(Uri.fromFile(responseInfo.result),
+                            "application/vnd.android.package-archive");
+                    startActivityForResult(intent, 0);// 如果用户取消安装的话,会返回结果,回调方法onActivityResult
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    Toast.makeText(AtyGuide.this, "失败", Toast.LENGTH_LONG).show();
+                    mTvProgress.setVisibility(View.INVISIBLE);
+                }
+            });
+        } else {
+            Toast.makeText(AtyGuide.this, "未挂载SD卡", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private String getVersionName() {
@@ -161,6 +215,7 @@ public class AtyGuide extends AppCompatActivity {
         }).start();
 
     }
+
     static class MyHandler extends Handler {
         WeakReference<AtyGuide> mActivity;
 
@@ -171,30 +226,34 @@ public class AtyGuide extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             AtyGuide theActivity = mActivity.get();
-                switch (msg.what) {
-                    case MyConfig.UPDATE_DIALOG: {
-                        theActivity.showDialog();
-                        break;
-                    }
-                    case MyConfig.JSON_ERROR: {
-                        Toast.makeText(theActivity.getApplicationContext(), "Json has wrong", Toast.LENGTH_LONG).show();
-                        theActivity.enterHome();
-                        break;
-                    }
-                    case MyConfig.URL_ERROR: {
-                        Toast.makeText(theActivity.getApplicationContext(), "URL has wrong", Toast.LENGTH_LONG).show();
-                        theActivity.enterHome();
-                        break;
-                    }
-                    case MyConfig.NET_ERROR: {
-                        Toast.makeText(theActivity.getApplicationContext(), "Net has wrong", Toast.LENGTH_LONG).show();
-                        theActivity.enterHome();
-                        break;
-                    }
-
+            switch (msg.what) {
+                case MyConfig.ENTER_HOME: {
+                    theActivity.enterHome();
                 }
+
+                case MyConfig.UPDATE_DIALOG: {
+                    theActivity.showDialog();
+                    break;
+                }
+                case MyConfig.JSON_ERROR: {
+                    Toast.makeText(theActivity.getApplicationContext(), "Json has wrong", Toast.LENGTH_LONG).show();
+                    theActivity.enterHome();
+                    break;
+                }
+                case MyConfig.URL_ERROR: {
+                    Toast.makeText(theActivity.getApplicationContext(), "URL has wrong", Toast.LENGTH_LONG).show();
+                    theActivity.enterHome();
+                    break;
+                }
+                case MyConfig.NET_ERROR: {
+                    Toast.makeText(theActivity.getApplicationContext(), "Net has wrong", Toast.LENGTH_LONG).show();
+                    theActivity.enterHome();
+                    break;
+                }
+
             }
         }
     }
+}
 
 
