@@ -8,8 +8,8 @@
         android:id="@+id/tv_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="安全卫士"
-        android:textSize="26dp"
+        android:text="@string/KEEP_SAFE"
+        android:textSize="26sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="180dp" />
@@ -17,7 +17,7 @@
         android:id="@+id/tv_ver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="版本号:"
+        android:text="@string/VERSION"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_guide"
         android:shadowDx="2"
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="下载进度"
+        android:text="@string/DOWNLOAD_STATUS"
         android:visibility="gone"
         android:textSize="20sp"
         android:id="@+id/tv_progress"
