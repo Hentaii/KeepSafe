@@ -3,6 +3,7 @@ package gan.keepsafe.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -58,7 +59,7 @@ public class SettingItemView extends RelativeLayout {
     }
 
     public void setCheck(boolean check) {
-        mCb_check.setEnabled(check);
+        mCb_check.setChecked(check);
         if (check) {
             setDesc(mDesc_on);
         } else {

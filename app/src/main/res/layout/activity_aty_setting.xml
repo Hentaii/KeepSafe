@@ -14,9 +14,9 @@
         android:id="@+id/siv_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:desc_off="@string/SETTING_AUTO_OFF"
-        app:desc_on="@string/SETTING_AUTO_ON"
-        app:set_title="@string/SETTING_AUTO" />
+        app:desc_off="自动更新已经关闭"
+        app:desc_on="自动更新已经打开"
+        app:set_title="自动更新" />
 
 
 </LinearLayout>

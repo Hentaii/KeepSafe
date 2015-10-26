@@ -33,11 +33,12 @@ public class AtySetting extends AppCompatActivity {
             public void onClick(View v) {
                 if (mSiv_update.isChecked()) {
                     mSiv_update.setCheck(false);
-                    mSpref.edit().putBoolean("auto_update", false).commit();
-                } else {
+                    mSpref.edit().putBoolean("auto_update", false).apply();
+                }else {
                     mSiv_update.setCheck(true);
                     mSpref.edit().putBoolean("auto_update", true).commit();
                 }
+
             }
         });
     }
