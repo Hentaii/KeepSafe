@@ -36,7 +36,7 @@ public class AtySetting extends AppCompatActivity {
                     mSpref.edit().putBoolean("auto_update", false).apply();
                 }else {
                     mSiv_update.setCheck(true);
-                    mSpref.edit().putBoolean("auto_update", true).commit();
+                    mSpref.edit().putBoolean("auto_update", true).apply();
                 }
 
             }

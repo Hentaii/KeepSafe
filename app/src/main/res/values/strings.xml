@@ -12,4 +12,10 @@
     <string name="DOWNLOAD_STATUS">下载进度</string>
     <string name="VERSION">版本号:</string>
     <string name="KEEP_SAFE">安全卫士</string>
+    <string name="title_activity_aty_safe">AtySafe</string>
+    <string name="SET_PASSWORD">密码设置</string>
+    <string name="INPUT_PASSWORD">请输入密码</string>
+    <string name="CONFIRM_INPUT_PASSWORD">请确认输入的密码</string>
+    <string name="CONFIRM">确定</string>
+    <string name="CANCEL">取消</string>
 </resources>

@@ -43,7 +43,7 @@ public class SettingItemView extends RelativeLayout {
         mTv_title = (TextView) findViewById(R.id.tv_title);
         mTv_desc = (TextView) findViewById(R.id.tv_desc);
         mCb_check = (CheckBox) findViewById(R.id.cb_check);
-        mTv_title.setText(mTitle);
+        setTitle(mTitle);
     }
 
     public boolean isChecked() {

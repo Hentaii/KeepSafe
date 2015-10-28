@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,6 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +44,15 @@ import gan.keepsafe.utils.StreamUtils;
 
 public class AtyGuide extends AppCompatActivity {
 
+    private RelativeLayout mRlGuide;
+    private SharedPreferences mSpref;
     private TextView mTvVersion;
     private TextView mTvProgress;
     private String mVersionName;
     private int mVersionCode;
     private String mDescription;
     private String mDownloadUrl;
+    private AlertDialog.Builder builder;
 
 
     @Override
@@ -54,15 +61,25 @@ public class AtyGuide extends AppCompatActivity {
         setContentView(R.layout.activity_aty_guide);
         mTvVersion = (TextView) findViewById(R.id.tv_ver);
         mTvProgress = (TextView) findViewById(R.id.tv_progress);
+        mRlGuide = (RelativeLayout) findViewById(R.id.rl_guide);
         mTvVersion.append(getVersionName());
-        cheakVersion();
+        mSpref = getSharedPreferences("config", MODE_PRIVATE);
+        boolean state = mSpref.getBoolean("auto_update", true);
+        if (state) {
+            cheakVersion();
+        } else {
+            mHandler.sendEmptyMessageDelayed(MyConfig.ENTER_HOME, 2000);
+        }
+        AlphaAnimation anim = new AlphaAnimation(0.3f, 1f);
+        anim.setDuration(3000);
+        mRlGuide.startAnimation(anim);
     }
 
     private MyHandler mHandler = new MyHandler(this);
 
 
     private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         builder.setTitle("最新版本" + mVersionCode);
         builder.setMessage(mDescription);
         builder.setPositiveButton("立刻更新", new DialogInterface.OnClickListener() {
@@ -179,7 +196,7 @@ public class AtyGuide extends AppCompatActivity {
                             mVersionCode = jsonObject.getInt("versionCode");
                             mDescription = jsonObject.getString("description");
                             mDownloadUrl = jsonObject.getString("downloadUrl");
-                            if (mVersionCode > getVersionCode()) {
+                            if (mVersionCode - getVersionCode() > 0) {
                                 msg.what = MyConfig.UPDATE_DIALOG;
                             } else {
                                 msg.what = MyConfig.ENTER_HOME;
@@ -229,6 +246,7 @@ public class AtyGuide extends AppCompatActivity {
             switch (msg.what) {
                 case MyConfig.ENTER_HOME: {
                     theActivity.enterHome();
+                    break;
                 }
 
                 case MyConfig.UPDATE_DIALOG: {

@@ -27,6 +27,10 @@
             android:name=".atys.AtySetting"
             android:label="@string/title_activity_aty_setting" >
         </activity>
+        <activity
+            android:name=".atys.AtySafe"
+            android:label="@string/title_activity_aty_safe" >
+        </activity>
     </application>
 
 </manifest>
