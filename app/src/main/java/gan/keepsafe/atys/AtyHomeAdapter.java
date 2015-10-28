@@ -4,10 +4,8 @@ package gan.keepsafe.atys;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import gan.keepsafe.R;
@@ -40,7 +38,7 @@ public class AtyHomeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = View.inflate(context, R.layout.activity_aty_home_item, null);
+        View view = View.inflate(context, R.layout.aty_home_item, null);
         ImageView mIvItem = (ImageView) view.findViewById(R.id.iv_item);
         TextView mTvItem = (TextView) view.findViewById(R.id.tv_item);
         mIvItem.setImageResource(mPics[position]);

@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,6 +15,7 @@ import android.widget.Toast;
 
 import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
+import gan.keepsafe.utils.MD5Utils;
 
 public class AtyHome extends AppCompatActivity {
 
@@ -36,7 +35,7 @@ public class AtyHome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aty_home);
+        setContentView(R.layout.aty_home);
         mGvList = (GridView) findViewById(R.id.gv_list);
         mSpref = getSharedPreferences("config", MODE_PRIVATE);
         mGvList.setAdapter(new AtyHomeAdapter(this, mItem, mPics));
@@ -76,9 +75,9 @@ public class AtyHome extends AppCompatActivity {
         mBtnComfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mEtPassword.getText().toString().equals(getPassword)) {
-                    Toast.makeText(AtyHome.this, "登陆成功", Toast.LENGTH_LONG).show();
+                if (MD5Utils.encode(mEtPassword.getText().toString()).equals(getPassword)) {
                     dialog.dismiss();
+                    startActivity(new Intent(AtyHome.this,AtyLostFind.class));
                 } else {
                     Toast.makeText(AtyHome.this, "密码错误,请重新输入", Toast.LENGTH_LONG).show();
                 }
@@ -110,9 +109,9 @@ public class AtyHome extends AppCompatActivity {
                 String mConfirmPassword = mEtConfirmPassword.getText().toString();
                 if (!TextUtils.isEmpty(mPassword) && !TextUtils.isEmpty(mConfirmPassword)) {
                     if (mPassword.equals(mConfirmPassword)) {
-                        mSpref.edit().putString("password", mPassword).apply();
+                        mSpref.edit().putString("password", MD5Utils.encode(mPassword)).apply();
                         dialog.dismiss();
-                        Toast.makeText(AtyHome.this, "密码设置成功", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(AtyHome.this, AtyLostFind.class));
                     } else {
                         Toast.makeText(AtyHome.this, "两次密码设置不一致，请重新设置", Toast.LENGTH_LONG).show();
                         mEtPassword.setText("");

@@ -3,8 +3,6 @@ package gan.keepsafe.atys;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import gan.keepsafe.R;
@@ -18,7 +16,7 @@ public class AtySetting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aty_setting);
+        setContentView(R.layout.aty_setting);
         mSpref = getSharedPreferences("config", MODE_PRIVATE);
         mSiv_update = (SettingItemView) findViewById(R.id.siv_update);
         boolean state = mSpref.getBoolean("auto_update", true);

@@ -28,8 +28,24 @@
             android:label="@string/title_activity_aty_setting" >
         </activity>
         <activity
-            android:name=".atys.AtySafe"
+            android:name=".atys.AtyLostFind"
             android:label="@string/title_activity_aty_safe" >
+        </activity>
+        <activity
+            android:name=".atys.AtySetup1"
+            android:label="@string/title_activity_aty_setup1" >
+        </activity>
+        <activity
+            android:name=".atys.AtySetup2"
+            android:label="@string/title_activity_aty_setup2" >
+        </activity>
+        <activity
+            android:name=".atys.AtySetup3"
+            android:label="@string/title_activity_aty_setup3" >
+        </activity>
+        <activity
+            android:name=".atys.AtySetup4"
+            android:label="@string/title_activity_aty_setup4" >
         </activity>
     </application>
 

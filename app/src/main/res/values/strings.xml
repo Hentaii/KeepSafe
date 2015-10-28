@@ -18,4 +18,17 @@
     <string name="CONFIRM_INPUT_PASSWORD">请确认输入的密码</string>
     <string name="CONFIRM">确定</string>
     <string name="CANCEL">取消</string>
+    <string name="PROTECT_FROM_THEFT">手机防盗</string>
+    <string name="title_activity_aty_setup1">AtySetup1</string>
+    <string name="WELCOME_PROTECT_THEFT">欢迎使用手机防盗</string>
+    <string name="PROTECT_THEFT_1">您的手机防盗卫士:</string>
+    <string name="PROTECT_THEFT_2">SIM卡变更报警</string>
+    <string name="PROTECT_THEFT_3">GPS追踪</string>
+    <string name="PROTECT_THEFT_4">远程销毁数据</string>
+    <string name="PROTECT_THEFT_5">远程锁屏</string>
+    <string name="NEXT">下一步</string>
+    <string name="Previous">上一步</string>
+    <string name="title_activity_aty_setup2">AtySetup2</string>
+    <string name="title_activity_aty_setup3">AtySetup3</string>
+    <string name="title_activity_aty_setup4">AtySetup4</string>
 </resources>
