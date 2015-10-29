@@ -22,7 +22,9 @@
         <TextView
             style="@style/ContentTitle"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:text="12345678987" />
     </RelativeLayout>
 
@@ -57,8 +59,12 @@
 
     <TextView
         style="@style/ContentTitle"
+        android:layout_width="match_parent"
         android:paddingBottom="3dp"
         android:paddingTop="2dp"
+        android:clickable="true"
+        android:onClick="Reset"
+        android:background="@drawable/tv_selector"
         android:text="重新进入设置向导" />
 
 

@@ -49,11 +49,13 @@ public class AtySetup2 extends AppCompatActivity {
     public void NextClick(View view) {
         startActivity(new Intent(AtySetup2.this, AtySetup3.class));
         finish();
+        overridePendingTransition(R.anim.trans_in, R.anim.trans_out);
     }
 
     public void PreClick(View view) {
         startActivity(new Intent(AtySetup2.this, AtySetup1.class));
         finish();
+        overridePendingTransition(R.anim.pre_trans_in, R.anim.pre_trans_out);
     }
 
 }

@@ -20,6 +20,7 @@ public class AtySetup1 extends AppCompatActivity {
     public void Click(View view){
         startActivity(new Intent(AtySetup1.this,AtySetup2.class));
         finish();
+        overridePendingTransition(R.anim.trans_in,R.anim.trans_out);
     }
 
 

@@ -8,23 +8,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="#B4CDCD"
+        android:gravity="center"
         android:text="功能列表"
         android:textColor="#000000"
-        android:textSize="35sp"
-        android:gravity="center"
-        android:background="#B4CDCD"/>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="10dp"
-    android:text="装逼利器，让你提神醒脑，使你永不疲劳，最终长生不老！谁用谁说好，谁用谁知道！"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:singleLine="true"
-    android:ellipsize="marquee"
-    android:textSize="20sp"
-    android:textColor="#698B22"/>
+        android:textSize="35sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:text="装逼利器，让你提神醒脑，使你永不疲劳，最终长生不老！谁用谁说好，谁用谁知道！"
+        android:textColor="#698B22"
+        android:textSize="20sp" />
 
     <GridView
         android:id="@+id/gv_list"
@@ -32,6 +33,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:numColumns="3"
-        android:verticalSpacing="120dp"/>
+        android:verticalSpacing="120dp" />
 
 </LinearLayout>
