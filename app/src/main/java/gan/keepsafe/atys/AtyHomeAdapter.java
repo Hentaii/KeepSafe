@@ -12,8 +12,8 @@ import gan.keepsafe.R;
 
 public class AtyHomeAdapter extends BaseAdapter {
     private Context context;
-    String[] mItems;
-    int[] mPics;
+    private String[] mItems;
+    private int[] mPics;
 
     public AtyHomeAdapter(Context context, String[] mItems, int[] mPics) {
         this.context = context;

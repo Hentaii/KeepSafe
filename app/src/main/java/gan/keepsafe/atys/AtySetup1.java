@@ -9,7 +9,7 @@ import android.view.View;
 
 import gan.keepsafe.R;
 
-public class AtySetup1 extends AppCompatActivity {
+public class AtySetup1 extends AtyBaseSetup {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +17,17 @@ public class AtySetup1 extends AppCompatActivity {
         setContentView(R.layout.aty_setup1);
     }
 
-    public void Click(View view){
-        startActivity(new Intent(AtySetup1.this,AtySetup2.class));
+
+    @Override
+    protected void ShowPrePage() {
+
+    }
+
+    @Override
+    protected void ShowNextPage() {
+        startActivity(new Intent(AtySetup1.this, AtySetup2.class));
         finish();
-        overridePendingTransition(R.anim.trans_in,R.anim.trans_out);
+        overridePendingTransition(R.anim.trans_in, R.anim.trans_out);
     }
 
 
