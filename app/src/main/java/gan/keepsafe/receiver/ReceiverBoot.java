@@ -21,7 +21,8 @@ public class ReceiverBoot extends BroadcastReceiver {
         if (state) {
             String mSimNum = mSpref.getString("sim_num", null);
             if (!TextUtils.isEmpty(mSimNum)) {
-                TelephonyManager mManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                TelephonyManager mManager = (TelephonyManager) context.getSystemService
+                        (Context.TELEPHONY_SERVICE);
                 String mContent_SimNum = mManager.getSimSerialNumber();
                 if (mSimNum != mContent_SimNum) {
                     Log.d("LOG", "不一样");
