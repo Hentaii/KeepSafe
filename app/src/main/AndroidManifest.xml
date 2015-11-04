@@ -88,6 +88,15 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".atys.AtyAtools"
+            android:label="@string/title_activity_aty_atools" >
+        </activity>
+        <activity
+            android:name=".atys.AtyAddress"
+            android:label="@string/title_activity_aty_address" >
+        </activity>
     </application>
 
 </manifest>

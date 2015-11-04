@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -60,6 +62,7 @@ public class AtyGuide extends AppCompatActivity {
         mRlGuide = (RelativeLayout) findViewById(R.id.rl_guide);
         mTvVersion.append(getVersionName());
         mSpref = getSharedPreferences("config", MODE_PRIVATE);
+        copyDB("address.db");
         boolean state = mSpref.getBoolean("auto_update", true);
         if (state) {
             cheakVersion();
@@ -266,6 +269,38 @@ public class AtyGuide extends AppCompatActivity {
                 }
 
             }
+        }
+    }
+
+    public void copyDB(String name) {
+        File file = new File(getFilesDir(), name);
+        if (file.exists()) {
+            Log.d("LOG","已经存在");
+            return;
+        }
+        InputStream in = null;
+        FileOutputStream out = null;
+        try {
+            in = getAssets().open(name);
+            out = new FileOutputStream(file);
+
+            int len = 0;
+            byte[] buffer = new byte[1024];
+
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

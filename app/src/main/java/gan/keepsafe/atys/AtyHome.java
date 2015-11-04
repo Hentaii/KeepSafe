@@ -13,6 +13,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
 import gan.keepsafe.utils.MD5Utils;
@@ -52,6 +57,10 @@ public class AtyHome extends AppCompatActivity {
                         }
                         break;
                     }
+                    case MyConfig.HOME_TOOLS: {
+                        startActivity(new Intent(AtyHome.this, AtyAtools.class));
+                        break;
+                    }
 
                     case MyConfig.HOME_SETTINGS: {
                         startActivity(new Intent(AtyHome.this, AtySetting.class));
@@ -77,7 +86,7 @@ public class AtyHome extends AppCompatActivity {
             public void onClick(View v) {
                 if (MD5Utils.encode(mEtPassword.getText().toString()).equals(getPassword)) {
                     dialog.dismiss();
-                    startActivity(new Intent(AtyHome.this,AtyLostFind.class));
+                    startActivity(new Intent(AtyHome.this, AtyLostFind.class));
                 } else {
                     Toast.makeText(AtyHome.this, "密码错误,请重新输入", Toast.LENGTH_LONG).show();
                 }

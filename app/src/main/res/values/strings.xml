@@ -32,4 +32,6 @@
     <string name="title_activity_aty_setup3">AtySetup3</string>
     <string name="title_activity_aty_setup4">AtySetup4</string>
     <string name="title_activity_aty_contact">AtyContact</string>
+    <string name="title_activity_aty_atools">AtyAtools</string>
+    <string name="title_activity_aty_address">AtyAddress</string>
 </resources>
