@@ -18,5 +18,13 @@
         app:desc_on="自动更新已经打开"
         app:set_title="自动更新" />
 
+    <gan.keepsafe.view.SettingItemView
+        android:id="@+id/siv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:desc_off="归属地显示已经关闭"
+        app:desc_on="归属地显示已经打开"
+        app:set_title="归属地显示" />
+
 
 </LinearLayout>

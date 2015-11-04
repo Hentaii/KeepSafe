@@ -34,4 +34,6 @@
     <string name="title_activity_aty_contact">AtyContact</string>
     <string name="title_activity_aty_atools">AtyAtools</string>
     <string name="title_activity_aty_address">AtyAddress</string>
+    <string name="title_activity_aty_gps_test">AtyGpsTest</string>
+    <string name="title_activity_aty_lock_screen">AtyLockScreen</string>
 </resources>

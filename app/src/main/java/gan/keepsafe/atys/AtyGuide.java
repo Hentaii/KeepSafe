@@ -1,6 +1,7 @@
 package gan.keepsafe.atys;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import java.net.URL;
 
 import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
+import gan.keepsafe.srv.SrvLocation;
 import gan.keepsafe.utils.StreamUtils;
 
 public class AtyGuide extends AppCompatActivity {
@@ -303,6 +305,7 @@ public class AtyGuide extends AppCompatActivity {
 
         }
     }
+
 }
 
 
