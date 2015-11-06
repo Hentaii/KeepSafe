@@ -1,14 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="gan.keepsafe.atys.AtySetting">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="gan.keepsafe.atys.AtySetting">
 
     <TextView
         style="@style/TitleStyle"
-        android:text="@string/SETTING" />
+        android:text="@string/SETTING"/>
 
     <gan.keepsafe.view.SettingItemView
         android:id="@+id/siv_update"
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         app:desc_off="自动更新已经关闭"
         app:desc_on="自动更新已经打开"
-        app:set_title="自动更新" />
+        app:set_title="自动更新"/>
 
     <gan.keepsafe.view.SettingItemView
         android:id="@+id/siv_address"
@@ -24,7 +24,19 @@
         android:layout_height="wrap_content"
         app:desc_off="归属地显示已经关闭"
         app:desc_on="归属地显示已经打开"
-        app:set_title="归属地显示" />
+        app:set_title="归属地显示"/>
+
+    <gan.keepsafe.view.SettingClickView
+        android:id="@+id/scv_address_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:set_title="号码归属地风格"/>
+
+    <gan.keepsafe.view.SettingClickView
+        android:id="@+id/scv_address_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:set_title="号码归属地位置"/>
 
 
 </LinearLayout>

@@ -46,5 +46,9 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:drawableLeft">@drawable/previous</item>
     </style>
+    
+    <style name="DialogFullScrenn">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
 </resources>
