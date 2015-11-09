@@ -19,6 +19,7 @@ public class AtySetting extends AppCompatActivity {
     private SettingItemView mSiv_update;
     private SettingItemView mSiv_address;
     private SettingClickView mScv_address_style;
+    private SettingClickView mScv_address_location;
     private SharedPreferences mSpref;
     private int address_style;
 
@@ -32,6 +33,18 @@ public class AtySetting extends AppCompatActivity {
         /*来电的话使用TelephonyManager监听,去电的话使用receiver接受广播*/
         initAddressView();
         initAddressStyle();
+        initAddressLocation();
+    }
+
+    private void initAddressLocation() {
+        mScv_address_location = (SettingClickView) findViewById(R.id.scv_address_location);
+        mScv_address_location.setDesc("进入可以选择提示框的位置");
+        mScv_address_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AtySetting.this,AtyDrawAddress.class));
+            }
+        });
     }
 
     public void initUpdateView() {

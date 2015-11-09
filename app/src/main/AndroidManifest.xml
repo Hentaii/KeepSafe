@@ -1,105 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="gan.keepsafe"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="gan.keepsafe" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".atys.AtyGuide"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".atys.AtyHome"
-            android:label="@string/title_activity_aty_home">
+            android:label="@string/title_activity_aty_home" >
         </activity>
         <activity
             android:name=".atys.AtySetting"
-            android:label="@string/title_activity_aty_setting">
+            android:label="@string/title_activity_aty_setting" >
         </activity>
         <activity
             android:name=".atys.AtyLostFind"
-            android:label="@string/title_activity_aty_safe">
+            android:label="@string/title_activity_aty_safe" >
         </activity>
         <activity
             android:name=".atys.AtySetup1"
-            android:label="@string/title_activity_aty_setup1">
+            android:label="@string/title_activity_aty_setup1" >
         </activity>
         <activity
             android:name=".atys.AtySetup2"
-            android:label="@string/title_activity_aty_setup2">
+            android:label="@string/title_activity_aty_setup2" >
         </activity>
         <activity
             android:name=".atys.AtySetup3"
-            android:label="@string/title_activity_aty_setup3">
+            android:label="@string/title_activity_aty_setup3" >
         </activity>
         <activity
             android:name=".atys.AtySetup4"
-            android:label="@string/title_activity_aty_setup4">
+            android:label="@string/title_activity_aty_setup4" >
         </activity>
 
         <receiver
             android:name=".receiver.ReceiverBoot"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
-                <action android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED"/>
+                <action android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".atys.AtyContact"
-            android:label="@string/title_activity_aty_contact">
+            android:label="@string/title_activity_aty_contact" >
         </activity>
 
         <receiver
             android:name=".receiver.ReceiverSMS"
             android:enabled="true"
-            android:exported="true">
-            <intent-filter android:priority="1000">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            android:exported="true" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".srv.SrvLocation"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
         </service>
 
         <activity
             android:name=".atys.AtyAtools"
-            android:label="@string/title_activity_aty_atools">
+            android:label="@string/title_activity_aty_atools" >
         </activity>
         <activity
             android:name=".atys.AtyAddress"
-            android:label="@string/title_activity_aty_address">
+            android:label="@string/title_activity_aty_address" >
         </activity>
 
         <service
             android:name=".srv.SrvAddress"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
         </service>
+
+        <activity
+            android:name=".atys.AtyDrawAddress"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:label="@string/title_activity_aty_draw_address" >
+        </activity>
     </application>
 
 </manifest>
