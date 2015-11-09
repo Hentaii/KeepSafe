@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.telephony.CellInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -29,6 +31,10 @@ public class SrvAddress extends Service {
     private WindowManager mWM;
     private View view;
     private SharedPreferences mSpref;
+    private int startX;
+    private int startY;
+    private int width;
+    private int height;
 
     public SrvAddress() {
     }
@@ -69,10 +75,11 @@ public class SrvAddress extends Service {
                     showToast(address);
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
-                    if (mWM != null && view != null){
+                    if (mWM != null && view != null) {
                         mWM.removeView(view);
                         view = null;
                     }
+                    break;
                 default:
                     break;
             }
@@ -82,16 +89,21 @@ public class SrvAddress extends Service {
 
     public void showToast(String text) {
         mWM = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        width = mWM.getDefaultDisplay().getWidth();
+        height = mWM.getDefaultDisplay().getHeight();
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         params.format = PixelFormat.TRANSLUCENT;
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        params.type = WindowManager.LayoutParams.TYPE_PHONE;
         params.setTitle("Toast");
+        params.gravity = Gravity.LEFT + Gravity.TOP;
+        int x = mSpref.getInt("endX", 0);
+        int y = mSpref.getInt("endY", 0);
+        params.x = x;
+        params.y = y;
 
         view = View.inflate(this, R.layout.toast_address, null);
 
@@ -104,7 +116,57 @@ public class SrvAddress extends Service {
 
         TextView tvText = (TextView) view.findViewById(R.id.tv_number);
         tvText.setText(text);
+        view.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        switch (event.getAction()) {
+                                            case MotionEvent.ACTION_DOWN:
+                                                startX = (int) event.getRawX();
+                                                startY = (int) event.getRawY();
+                                                break;
+                                            case MotionEvent.ACTION_MOVE:
+                                                int endX = (int) event.getRawX();
+                                                int endY = (int) event.getRawY();
+                                                int dX = endX - startX;
+                                                int dY = endY - startY;
+                                                params.x += dX;
+                                                params.y += dY;
 
+                                                if (params.x < 0) {
+                                                    params.x = 0;
+                                                }
+
+                                                if (params.y < 0) {
+                                                    params.y = 0;
+                                                }
+
+                                                if (params.y > height - view.getHeight()) {
+                                                    params.y = height - view.getHeight();
+                                                }
+                                                if (params.x > height - view.getWidth()) {
+                                                    params.x = height - view.getWidth();
+                                                }
+                                                mWM.updateViewLayout(view, params);
+                                                startX = (int) event.getRawX();
+                                                startY = (int) event.getRawY();
+                                                break;
+                                            case MotionEvent.ACTION_UP:
+                                                // 记录坐标点
+                                                SharedPreferences.Editor edit = mSpref.edit();
+                                                edit.putInt("endX", params.x);
+                                                edit.putInt("endY", params.y);
+                                                edit.apply();
+                                                break;
+
+                                            default:
+                                                break;
+                                        }
+
+                                        return false;
+                                    }
+                                }
+
+        );
         mWM.addView(view, params);// 将view添加在屏幕上(Window)
     }
 

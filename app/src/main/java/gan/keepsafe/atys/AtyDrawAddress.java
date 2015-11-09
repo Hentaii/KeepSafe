@@ -3,6 +3,7 @@ package gan.keepsafe.atys;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,7 +25,7 @@ public class AtyDrawAddress extends Activity {
     private SharedPreferences mSpref;
     private int height;
     private int width;
-
+    private long[] mHits = new long[2];
     private int startX;
     private int startY;
 
@@ -60,6 +61,20 @@ public class AtyDrawAddress extends Activity {
 
         mIvDraw.setLayoutParams(layoutParams);
 
+
+        mIvDraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] = SystemClock.uptimeMillis();// 开机后开始计算的时间
+                if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
+                    // 把图片居中
+                    mIvDraw.layout(width / 2 - mIvDraw.getWidth() / 2, mIvDraw.getTop(), mIvDraw.getRight() / 2 +
+                            width / 2, mIvDraw.getBottom());
+                }
+            }
+        });
+
         mIvDraw.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -75,7 +90,7 @@ public class AtyDrawAddress extends Activity {
                         int dY = endY - startY;
 
                         if (mIvDraw.getLeft() + dX < 0 || mIvDraw.getRight() + dX > width || mIvDraw.getTop() + dY < 0
-                                || mIvDraw.getBottom() + dY  > height) {
+                                || mIvDraw.getBottom() + dY > height) {
                             break;
                         }
 
@@ -103,7 +118,7 @@ public class AtyDrawAddress extends Activity {
                         break;
                 }
 
-                return true;
+                return false;
             }
         });
 
