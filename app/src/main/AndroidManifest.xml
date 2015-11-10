@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -103,8 +103,20 @@
 
         <activity
             android:name=".atys.AtyDrawAddress"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:label="@string/title_activity_aty_draw_address" >
+            android:label="@string/title_activity_aty_draw_address"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+
+        <service
+            android:name=".srv.SrvRocket"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <activity
+            android:name=".atys.AtyRocketBg"
+            android:label="@string/title_activity_aty_rocket_bg"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
     </application>
 

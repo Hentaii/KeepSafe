@@ -38,5 +38,13 @@
         android:layout_height="wrap_content"
         app:set_title="号码归属地位置"/>
 
+    <gan.keepsafe.view.SettingItemView
+        android:id="@+id/siv_rocket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:desc_off="小火箭已经关闭"
+        app:desc_on="小火箭已经打开"
+        app:set_title="小火箭开关"/>
+
 
 </LinearLayout>

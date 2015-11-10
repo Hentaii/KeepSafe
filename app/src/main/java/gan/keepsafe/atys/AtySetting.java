@@ -10,6 +10,7 @@ import android.view.View;
 
 import gan.keepsafe.R;
 import gan.keepsafe.srv.SrvAddress;
+import gan.keepsafe.srv.SrvRocket;
 import gan.keepsafe.utils.ServiceStatusUtils;
 import gan.keepsafe.view.SettingClickView;
 import gan.keepsafe.view.SettingItemView;
@@ -18,6 +19,7 @@ public class AtySetting extends AppCompatActivity {
 
     private SettingItemView mSiv_update;
     private SettingItemView mSiv_address;
+    private SettingItemView mSiv_rocket;
     private SettingClickView mScv_address_style;
     private SharedPreferences mSpref;
     private int address_style;
@@ -33,6 +35,30 @@ public class AtySetting extends AppCompatActivity {
         initAddressView();
         initAddressStyle();
         initAddressLocation();
+        initRocket();
+    }
+
+    private void initRocket() {
+        mSiv_rocket = (SettingItemView) findViewById(R.id.siv_rocket);
+        boolean state =mSpref.getBoolean("rocket",false);
+        mSiv_rocket.setCheck(state);
+        if (mSiv_rocket.isChecked()){
+            startService(new Intent(AtySetting.this, SrvRocket.class));
+        }
+        mSiv_rocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSiv_rocket.isChecked()){
+                    mSpref.edit().putBoolean("rocket",false).apply();
+                    mSiv_rocket.setCheck(false);
+                    stopService(new Intent(AtySetting.this, SrvRocket.class));
+                }else{
+                    mSpref.edit().putBoolean("rocket",true).apply();
+                    mSiv_rocket.setCheck(true);
+                    startService(new Intent(AtySetting.this, SrvRocket.class));
+                }
+            }
+        });
     }
 
     private void initAddressLocation() {

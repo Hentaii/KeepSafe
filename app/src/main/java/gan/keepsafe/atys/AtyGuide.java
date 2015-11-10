@@ -40,6 +40,7 @@ import java.net.URL;
 import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
 import gan.keepsafe.srv.SrvLocation;
+import gan.keepsafe.srv.SrvRocket;
 import gan.keepsafe.utils.StreamUtils;
 
 public class AtyGuide extends AppCompatActivity {
