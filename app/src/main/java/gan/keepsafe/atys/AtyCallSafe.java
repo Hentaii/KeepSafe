@@ -7,8 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,6 +36,7 @@ public class AtyCallSafe extends AppCompatActivity {
     private int mContentPage = 0;
     private int mMaxCount = 20;
 
+
     private int mTotalPage = 10;
     private int mTotalNumber;
     private BlackNumberDao mDb;
@@ -56,6 +59,35 @@ public class AtyCallSafe extends AppCompatActivity {
         progressDialog.setMessage("正在玩命加载，请稍后");
         progressDialog.setCancelable(true);
         progressDialog.show();
+        scroll();
+    }
+
+    private void scroll() {
+        mLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        int lastVisiblePosition = mLv.getLastVisiblePosition();
+                        if (lastVisiblePosition == mBlackNumberInfo.size() - 1) {
+                            Log.d("Log", lastVisiblePosition + "");
+                            mContentPage = (lastVisiblePosition + 1) / mMaxCount;
+                            if (lastVisiblePosition >= mTotalNumber) {
+                                Toast.makeText(AtyCallSafe.this, "已经滑动到最后一页", Toast.LENGTH_SHORT)
+                                        .show();
+                                return;
+                            }
+                            initData();
+                        }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+                mTvPageNum.setText(firstVisibleItem / mMaxCount + 1 + "/" + mTotalPage);
+            }
+        });
     }
 
     private Handler mHandler = new Handler() {
@@ -66,6 +98,7 @@ public class AtyCallSafe extends AppCompatActivity {
             mTvPageNum.setText(mContentPage + 1 + "/" + mTotalPage);
             myAdapter = new MyAdapter(AtyCallSafe.this, mBlackNumberInfo);
             mLv.setAdapter(myAdapter);
+            mLv.setSelection(mContentPage * mMaxCount);
         }
     };
 
@@ -75,12 +108,16 @@ public class AtyCallSafe extends AppCompatActivity {
             public void run() {
                 mDb = new BlackNumberDao(AtyCallSafe.this);
                 mTotalNumber = mDb.getTotalNumber();
-                if (mTotalNumber % mMaxCount == 0) {
-                    mTotalPage = mTotalNumber / mMaxCount;
-                } else {
-                    mTotalPage = mTotalNumber / mMaxCount + 1;
+                mTotalPage = (int) Math.floor(mTotalNumber / mMaxCount);
+                if (mBlackNumberInfo == null) {
+                    mBlackNumberInfo = mDb.findPar(mContentPage, mMaxCount);
+                } else if (mBlackNumberInfo.size() / mMaxCount - 1 < mContentPage) {
+                    Log.d("Log", "log");
+                    for (int i = mContentPage - mBlackNumberInfo.size() / mMaxCount; i >= 0;
+                         i--) {
+                        mBlackNumberInfo.addAll(mDb.findPar(mContentPage - i + 1, mMaxCount));
+                    }
                 }
-                mBlackNumberInfo = mDb.findPar(mContentPage, mMaxCount);
                 mHandler.sendEmptyMessage(0);
             }
         }).start();
@@ -105,16 +142,17 @@ public class AtyCallSafe extends AppCompatActivity {
     }
 
     public void jump(View view) {
-        int page = Integer.parseInt(mEtJump.getText().toString().trim());
-        if (TextUtils.isEmpty(page + "")) {
+        if (TextUtils.isEmpty(mEtJump.getText().toString().trim())) {
             Toast.makeText(AtyCallSafe.this, "请输入想要跳转的页码", Toast.LENGTH_SHORT).show();
+            return;
         }
+        int page = Integer.parseInt(mEtJump.getText().toString().trim());
         if (page >= 1 && page <= mTotalPage) {
             mContentPage = page - 1;
+            mEtJump.setText("");
             initData();
         } else {
             Toast.makeText(AtyCallSafe.this, "请输入正确的的页码", Toast.LENGTH_SHORT).show();
-
         }
     }
 
