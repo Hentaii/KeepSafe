@@ -116,7 +116,11 @@
         <activity
             android:name=".atys.AtyRocketBg"
             android:label="@string/title_activity_aty_rocket_bg"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".atys.AtyCallSafe"
+            android:label="@string/title_activity_aty_call_safe" >
         </activity>
     </application>
 
