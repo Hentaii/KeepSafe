@@ -21,5 +21,11 @@ public class MyConfig {
     public static final int HOME_TOOLS = 7;
     public static final int HOME_SETTINGS = 8;
 
+    public static final int MODE_PHONE_AND_SMS = 1;
+    public static final int MODE_PHONE = 2;
+    public static final int MODE_SMS = 3;
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package gan.keepsafe.atys;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
 import gan.keepsafe.adp.MyBaseAdapter;
 import gan.keepsafe.bean.BlackNumberInfo;
@@ -41,6 +45,11 @@ public class AtyCallSafe extends AppCompatActivity {
     private int mTotalNumber;
     private BlackNumberDao mDb;
     private MyAdapter myAdapter;
+    private EditText mEtPhone;
+    private CheckBox mCbPhone;
+    private CheckBox mCbSms;
+    private Button mBtnOk;
+    private Button mBtncancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +121,6 @@ public class AtyCallSafe extends AppCompatActivity {
                 if (mBlackNumberInfo == null) {
                     mBlackNumberInfo = mDb.findPar(mContentPage, mMaxCount);
                 } else if (mBlackNumberInfo.size() / mMaxCount - 1 < mContentPage) {
-                    Log.d("Log", "log");
                     for (int i = mContentPage - mBlackNumberInfo.size() / mMaxCount; i >= 0;
                          i--) {
                         mBlackNumberInfo.addAll(mDb.findPar(mContentPage - i + 1, mMaxCount));
@@ -122,6 +130,61 @@ public class AtyCallSafe extends AppCompatActivity {
             }
         }).start();
     }
+
+
+    public void addBlack(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AtyCallSafe.this);
+        final AlertDialog dialog = builder.create();
+        View dialogView = View.inflate(AtyCallSafe.this, R.layout.dialog_add_black, null);
+        mEtPhone = (EditText) dialogView.findViewById(R.id.et_black_num);
+        mCbPhone = (CheckBox) dialogView.findViewById(R.id.cb_phone);
+        mCbSms = (CheckBox) dialogView.findViewById(R.id.cb_sms);
+        mBtnOk = (Button) dialogView.findViewById(R.id.btn_ok);
+        mBtncancel = (Button) dialogView.findViewById(R.id.btn_cancel);
+        mBtnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strPhone = mEtPhone.getText().toString().trim();
+                boolean boolPhone = mCbPhone.isChecked();
+                boolean boolSms = mCbSms.isChecked();
+                if (TextUtils.isEmpty(strPhone)) {
+                    Toast.makeText(AtyCallSafe.this, "请输入号码", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
+                    blackNumberInfo.setNumber(strPhone);
+                    if (boolPhone && boolSms) {
+                        blackNumberInfo.setMode(String.valueOf(MyConfig.MODE_PHONE_AND_SMS));
+                    } else if (boolPhone) {
+                        blackNumberInfo.setMode(String.valueOf(MyConfig.MODE_PHONE));
+                    } else if (boolSms) {
+                        blackNumberInfo.setMode(String.valueOf(MyConfig.MODE_SMS));
+                    } else {
+                        Toast.makeText(AtyCallSafe.this, "勾选拦截模式", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    mBlackNumberInfo.add(0, blackNumberInfo);
+                    mDb.add(strPhone, blackNumberInfo.getMode());
+                    if (myAdapter == null) {
+                        myAdapter = new MyAdapter(AtyCallSafe.this, mBlackNumberInfo);
+                        mLv.setAdapter(myAdapter);
+                    } else {
+                        myAdapter.notifyDataSetChanged();
+                    }
+                    dialog.dismiss();
+                }
+            }
+        });
+        mBtncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(dialogView);
+        dialog.show();
+    }
+
 
     public void prePage(View view) {
         if (mContentPage + 1 <= 1) {
@@ -177,13 +240,13 @@ public class AtyCallSafe extends AppCompatActivity {
             }
             mHolder.mPhoneNum.setText(mBlackNumberInfo.get(position).getNumber());
             switch (Integer.parseInt(mBlackNumberInfo.get(position).getMode())) {
-                case 1:
-                    mHolder.mMode.setText("来电加短信拦截");
+                case MyConfig.MODE_PHONE_AND_SMS:
+                    mHolder.mMode.setText("来电+短信拦截");
                     break;
-                case 2:
+                case MyConfig.MODE_PHONE:
                     mHolder.mMode.setText("电话拦截");
                     break;
-                case 3:
+                case MyConfig.MODE_SMS:
                     mHolder.mMode.setText("短信拦截");
                     break;
             }
@@ -193,11 +256,12 @@ public class AtyCallSafe extends AppCompatActivity {
                 public void onClick(View v) {
                     String num = info.getNumber();
                     if (mDb.delete(num)) {
+                        mBlackNumberInfo.remove(info);
                         Toast.makeText(AtyCallSafe.this, "成功删除", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(AtyCallSafe.this, "删除失败", Toast.LENGTH_SHORT).show();
                     }
-                    myAdapter.notifyDataSetChanged();
+
                     initData();
                 }
             });
