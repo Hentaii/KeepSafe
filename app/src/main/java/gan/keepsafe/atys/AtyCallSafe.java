@@ -117,7 +117,11 @@ public class AtyCallSafe extends AppCompatActivity {
             public void run() {
                 mDb = new BlackNumberDao(AtyCallSafe.this);
                 mTotalNumber = mDb.getTotalNumber();
-                mTotalPage = (int) Math.floor(mTotalNumber / mMaxCount);
+                if (mTotalNumber % mMaxCount == 0) {
+                    mTotalPage = mTotalNumber / mMaxCount;
+                } else {
+                    mTotalPage = mTotalNumber / mMaxCount + 1;
+                }
                 if (mBlackNumberInfo == null) {
                     mBlackNumberInfo = mDb.findPar(mContentPage, mMaxCount);
                 } else if (mBlackNumberInfo.size() / mMaxCount - 1 < mContentPage) {

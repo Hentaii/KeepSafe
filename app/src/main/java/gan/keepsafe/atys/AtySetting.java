@@ -10,6 +10,7 @@ import android.view.View;
 
 import gan.keepsafe.R;
 import gan.keepsafe.srv.SrvAddress;
+import gan.keepsafe.srv.SrvBlack;
 import gan.keepsafe.srv.SrvRocket;
 import gan.keepsafe.utils.ServiceStatusUtils;
 import gan.keepsafe.view.SettingClickView;
@@ -23,6 +24,7 @@ public class AtySetting extends AppCompatActivity {
     private SettingClickView mScv_address_style;
     private SharedPreferences mSpref;
     private int address_style;
+    private SettingItemView mSiv_black;
 
 
     @Override
@@ -36,6 +38,7 @@ public class AtySetting extends AppCompatActivity {
         initAddressStyle();
         initAddressLocation();
         initRocket();
+        initBlackView();
     }
 
     private void initRocket() {
@@ -48,12 +51,12 @@ public class AtySetting extends AppCompatActivity {
         mSiv_rocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSiv_rocket.isChecked()){
-                    mSpref.edit().putBoolean("rocket",false).apply();
+                if (mSiv_rocket.isChecked()) {
+                    mSpref.edit().putBoolean("rocket", false).apply();
                     mSiv_rocket.setCheck(false);
                     stopService(new Intent(AtySetting.this, SrvRocket.class));
-                }else{
-                    mSpref.edit().putBoolean("rocket",true).apply();
+                } else {
+                    mSpref.edit().putBoolean("rocket", true).apply();
                     mSiv_rocket.setCheck(true);
                     startService(new Intent(AtySetting.this, SrvRocket.class));
                 }
@@ -111,6 +114,27 @@ public class AtySetting extends AppCompatActivity {
                 } else {
                     mSiv_address.setCheck(true);
                     startService(new Intent(AtySetting.this, SrvAddress.class));
+                }
+            }
+        });
+    }
+
+    public void initBlackView() {
+        mSiv_black = (SettingItemView) findViewById(R.id.siv_black);
+        if (ServiceStatusUtils.isServiceRunning(AtySetting.this, "gan.keepsafe.srv.SrvBlack")) {
+            mSiv_black.setCheck(true);
+        } else {
+            mSiv_black.setCheck(false);
+        }
+        mSiv_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSiv_black.isChecked()) {
+                    mSiv_black.setCheck(false);
+                    stopService(new Intent(AtySetting.this, SrvBlack.class));
+                } else {
+                    mSiv_black.setCheck(true);
+                    startService(new Intent(AtySetting.this, SrvBlack.class));
                 }
             }
         });

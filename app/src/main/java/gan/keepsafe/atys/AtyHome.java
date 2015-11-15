@@ -61,6 +61,10 @@ public class AtyHome extends AppCompatActivity {
                         startActivity(new Intent(AtyHome.this,AtyCallSafe.class));
                         break;
                     }
+                    case MyConfig.HOME_APPS:{
+                        startActivity(new Intent(AtyHome.this,AtyAppManager.class));
+                        break;
+                    }
                     case MyConfig.HOME_TOOLS: {
                         startActivity(new Intent(AtyHome.this, AtyAtools.class));
                         break;
