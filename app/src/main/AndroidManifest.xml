@@ -122,6 +122,17 @@
             android:name=".atys.AtyCallSafe"
             android:label="@string/title_activity_aty_call_safe" >
         </activity>
+
+        <service
+            android:name=".srv.SrvBlack"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <activity
+            android:name=".atys.AtyAppManager"
+            android:label="@string/title_activity_aty_app_manager" >
+        </activity>
     </application>
 
 </manifest>

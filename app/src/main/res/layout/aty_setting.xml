@@ -46,5 +46,13 @@
         app:desc_on="小火箭已经打开"
         app:set_title="小火箭开关"/>
 
+    <gan.keepsafe.view.SettingItemView
+        android:id="@+id/siv_black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:desc_off="黑名单已经关闭"
+        app:desc_on="黑名单已经打开"
+        app:set_title="黑名单开关"/>
+
 
 </LinearLayout>

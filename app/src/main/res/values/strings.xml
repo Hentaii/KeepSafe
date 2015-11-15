@@ -39,4 +39,5 @@
     <string name="title_activity_aty_draw_address">AtyDrawAddress</string>
     <string name="title_activity_aty_rocket_bg">AtyRocketBg</string>
     <string name="title_activity_aty_call_safe">AtyCallSafe</string>
+    <string name="title_activity_aty_app_manager">AtyAppManager</string>
 </resources>
