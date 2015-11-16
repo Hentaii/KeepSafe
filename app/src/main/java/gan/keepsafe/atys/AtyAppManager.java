@@ -1,22 +1,33 @@
 package gan.keepsafe.atys;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Formatter;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import gan.keepsafe.R;
 import gan.keepsafe.bean.AppInfo;
@@ -32,6 +43,8 @@ public class AtyAppManager extends AppCompatActivity {
     private List<AppInfo> mAppinfos;
     private List<AppInfo> mUserInfos;
     private List<AppInfo> mSysInfos;
+    private AppInfo mClickAppinfo;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +86,7 @@ public class AtyAppManager extends AppCompatActivity {
         mTvRom = (TextView) findViewById(R.id.tv_rom);
         mTvSd = (TextView) findViewById(R.id.tv_sd);
         mLv = (ListView) findViewById(R.id.list_view);
+        mTvApp = (TextView) findViewById(R.id.tv_app);
 
         long RomSpace = Environment.getDataDirectory().getFreeSpace();
         long SdSpace = Environment.getExternalStorageDirectory().getFreeSpace();
@@ -80,9 +94,55 @@ public class AtyAppManager extends AppCompatActivity {
         mTvRom.setText("内存可用为：" + Formatter.formatFileSize(this, RomSpace));
         mTvSd.setText("SD卡可用为：" + Formatter.formatFileSize(this, SdSpace));
 
+        mLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+                PopWindowDissmiss();
+                if (mSysInfos != null && mUserInfos != null) {
+                    if (firstVisibleItem > mUserInfos.size() + 1) {
+                        mTvApp.setText("系统应用(" + mSysInfos.size() + ")");
+                    } else {
+                        mTvApp.setText("用户应用(" + mUserInfos.size() + ")");
+                    }
+                }
+            }
+        });
+
+        mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object object = mLv.getItemAtPosition(position);
+                if (object != null && object instanceof AppInfo) {
+                    mClickAppinfo = (AppInfo) object;
+                    View ContentView = View.inflate(AtyAppManager.this, R.layout.item_popup, null);
+                    PopWindowDissmiss();
+                    mPopupWindow = new PopupWindow(ContentView, ViewGroup.LayoutParams
+                            .WRAP_CONTENT, ViewGroup
+                            .LayoutParams.WRAP_CONTENT);
+                    mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    int[] location = new int[2];
+                    view.getLocationInWindow(location);
+                    mPopupWindow.showAtLocation(view, Gravity.LEFT + Gravity.TOP, 70, location[1]);
+                    ScaleAnimation sa = new ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f, Animation
+                            .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    sa.setDuration(300);
+                    ContentView.setAnimation(sa);
+                }
+            }
+        });
     }
 
+    private void PopWindowDissmiss() {
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
+    }
 
     private class AppManageAdapter extends BaseAdapter {
         @Override
@@ -104,13 +164,13 @@ public class AtyAppManager extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position == 0) {
                 TextView textView = new TextView(AtyAppManager.this);
-                textView.setText("用户应用(" + mUserInfos.size() + ")个");
+                textView.setText("用户应用(" + mUserInfos.size() + ")");
                 textView.setTextColor(Color.WHITE);
                 textView.setBackgroundColor(Color.GRAY);
                 return textView;
             } else if (position == mUserInfos.size() + 1) {
                 TextView textView = new TextView(AtyAppManager.this);
-                textView.setText("系统应用(" + mSysInfos.size() + ")个");
+                textView.setText("系统应用(" + mSysInfos.size() + ")");
                 textView.setTextColor(Color.WHITE);
                 textView.setBackgroundColor(Color.GRAY);
                 return textView;
