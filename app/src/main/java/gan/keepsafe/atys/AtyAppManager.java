@@ -1,19 +1,18 @@
 package gan.keepsafe.atys;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Formatter;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
@@ -27,13 +26,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import gan.keepsafe.R;
 import gan.keepsafe.bean.AppInfo;
 import gan.keepsafe.engine.AppInfos;
 
-public class AtyAppManager extends AppCompatActivity {
+public class AtyAppManager extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTvRom;
     private TextView mTvSd;
@@ -45,6 +43,7 @@ public class AtyAppManager extends AppCompatActivity {
     private List<AppInfo> mSysInfos;
     private AppInfo mClickAppinfo;
     private PopupWindow mPopupWindow;
+    private AppManageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class AtyAppManager extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            AppManageAdapter adapter = new AppManageAdapter();
+            adapter = new AppManageAdapter();
             mLv.setAdapter(adapter);
         }
     };
@@ -121,7 +120,21 @@ public class AtyAppManager extends AppCompatActivity {
                 if (object != null && object instanceof AppInfo) {
                     mClickAppinfo = (AppInfo) object;
                     View ContentView = View.inflate(AtyAppManager.this, R.layout.item_popup, null);
+                    LinearLayout ll_start = (LinearLayout) ContentView.findViewById(R.id.ll_start);
+                    LinearLayout ll_uninstall = (LinearLayout) ContentView.findViewById(R.id
+                            .ll_uninstall);
+                    LinearLayout ll_share = (LinearLayout) ContentView.findViewById(R.id.ll_share);
+                    LinearLayout ll_detail = (LinearLayout) ContentView.findViewById(R.id
+                            .ll_detail);
+
+                    ll_start.setOnClickListener(AtyAppManager.this);
+                    ll_uninstall.setOnClickListener(AtyAppManager.this);
+                    ll_share.setOnClickListener(AtyAppManager.this);
+                    ll_detail.setOnClickListener(AtyAppManager.this);
+
                     PopWindowDissmiss();
+
+
                     mPopupWindow = new PopupWindow(ContentView, ViewGroup.LayoutParams
                             .WRAP_CONTENT, ViewGroup
                             .LayoutParams.WRAP_CONTENT);
@@ -144,15 +157,74 @@ public class AtyAppManager extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_share:
+                Intent share_localIntent = new Intent("android.intent.action.SEND");
+                share_localIntent.setType("text/plain");
+                share_localIntent.putExtra("android.intent.extra.SUBJECT", "f分享");
+                share_localIntent.putExtra("android.intent.extra.TEXT",
+                        "Hi！推荐您使用软件：" + mClickAppinfo.getApkName() + "下载地址:" + "https://play" +
+                                ".google.com/store/apps/details?id=" + mClickAppinfo
+                                .getApkPackageName());
+                this.startActivity(Intent.createChooser(share_localIntent, "分享"));
+                PopWindowDissmiss();
+                break;
+
+            case R.id.ll_start:
+                Intent start_localIntent = this.getPackageManager().getLaunchIntentForPackage
+                        (mClickAppinfo.getApkPackageName());
+                this.startActivity(start_localIntent);
+                PopWindowDissmiss();
+                break;
+
+            case R.id.ll_detail:
+                Intent detail_intent = new Intent();
+                detail_intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                detail_intent.addCategory(Intent.CATEGORY_DEFAULT);
+                detail_intent.setData(Uri.parse("package:" + mClickAppinfo.getApkPackageName()));
+                startActivity(detail_intent);
+                PopWindowDissmiss();
+                break;
+
+            case R.id.ll_uninstall:
+                Intent uninstall_localIntent = new Intent("android.intent.action.DELETE", Uri
+                        .parse("package:" + mClickAppinfo.getApkPackageName()));
+                startActivity(uninstall_localIntent);
+                PopWindowDissmiss();
+                if (mClickAppinfo.isUserApp()) {
+                    mUserInfos.remove(mClickAppinfo);
+                } else {
+                    mSysInfos.remove(mClickAppinfo);
+                }
+                mAppinfos.remove(mClickAppinfo);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+
+    }
+
     private class AppManageAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return mAppinfos.size();
+            return mAppinfos.size() + 2;
         }
 
         @Override
         public Object getItem(int position) {
-            return mAppinfos.get(position);
+            AppInfo appInfo;
+            if (position == 0) {
+                return null;
+            } else if (position == mUserInfos.size() + 1) {
+                return null;
+            }
+            if (position < mUserInfos.size() + 1) {
+                appInfo = mUserInfos.get(position - 1);
+            } else {
+                appInfo = mSysInfos.get(position - 2 - mUserInfos.size());
+            }
+            return appInfo;
         }
 
         @Override

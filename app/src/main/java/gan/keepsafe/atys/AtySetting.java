@@ -126,7 +126,7 @@ public class AtySetting extends AppCompatActivity {
         } else {
             mSiv_black.setCheck(false);
         }
-        mSiv_address.setOnClickListener(new View.OnClickListener() {
+        mSiv_black.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mSiv_black.isChecked()) {
