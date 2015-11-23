@@ -1,24 +1,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <TextView
         style="@style/TitleStyle"
-        android:text="高级工具" />
+        android:text="高级工具"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:clickable="true"
-        android:onClick="numAddQuery"
-        android:text="号码归属地查询"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:textColor="#000"
-        android:padding="10dp"
-        android:drawablePadding="3dp"
         android:background="@drawable/btn_press_selector"
+        android:clickable="true"
+        android:drawableLeft="@android:drawable/ic_menu_camera"
+        android:drawablePadding="3dp"
+        android:onClick="numAddQuery"
+        android:padding="10dp"
+        android:text="号码归属地查询"
+        android:textColor="#000"
+        android:textSize="28sp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_press_selector"
+        android:clickable="true"
+        android:drawableLeft="@android:drawable/ic_menu_camera"
+        android:drawablePadding="3dp"
+        android:onClick="backUp"
+        android:padding="10dp"
+        android:text="短信备份"
+        android:textColor="#000"
+        android:textSize="28sp"
+        />
+
+    <ProgressBar
+        android:id="@+id/pb_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_press_selector"
+        android:clickable="true"
+        android:drawableLeft="@android:drawable/ic_menu_camera"
+        android:drawablePadding="3dp"
+        android:onClick="setShortCut"
+        android:padding="10dp"
+        android:text="建立联系人快捷方式"
+        android:textColor="#000"
+        android:textSize="28sp"
         />
 
 </LinearLayout>

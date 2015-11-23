@@ -257,6 +257,7 @@ public class AtyAppManager extends AppCompatActivity implements View.OnClickList
             }
             ViewHolder holder;
             View view;
+            //因为存在特殊的item，所以要这样写，否则会出现holder不能重用的情况
             if (convertView != null && convertView instanceof LinearLayout) {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();

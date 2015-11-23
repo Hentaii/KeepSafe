@@ -29,7 +29,7 @@ public class AtyContact extends AppCompatActivity {
 
         lvList = (ListView) findViewById(R.id.lv_list);
 
-        ArrayList<HashMap<String, String>> readContact = readContact();
+        final ArrayList<HashMap<String, String>> readContact = readContact();
         // System.out.println(readContact);
         lvList.setAdapter(new SimpleAdapter(this, readContact,
                 R.layout.list_item_contact, new String[]{"name", "phone"},
@@ -40,8 +40,11 @@ public class AtyContact extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String mPhoneNum = readContact().get(position).
                         get("phone").replaceAll("-", "").replace(" ","");
+                String mPhoneName = readContact().get(position).
+                        get("name");
                 Intent intent = new Intent();
                 intent.putExtra("phone",mPhoneNum);
+                intent.putExtra("name",mPhoneName);
                 setResult(Activity.RESULT_OK,intent);
                 finish();
             }

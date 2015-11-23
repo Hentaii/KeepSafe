@@ -40,4 +40,5 @@
     <string name="title_activity_aty_rocket_bg">AtyRocketBg</string>
     <string name="title_activity_aty_call_safe">AtyCallSafe</string>
     <string name="title_activity_aty_app_manager">AtyAppManager</string>
+    <string name="title_activity_aty_input_phone_num">AtyInputPhoneNum</string>
 </resources>
