@@ -222,7 +222,6 @@ public class AtyCallSafe extends AppCompatActivity {
             Toast.makeText(AtyCallSafe.this, "请输入正确的的页码", Toast.LENGTH_SHORT).show();
         }
     }
-
     private class MyAdapter extends MyBaseAdapter<BlackNumberInfo> {
 
         public MyAdapter(Context context, List<BlackNumberInfo> list) {

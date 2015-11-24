@@ -29,7 +29,7 @@ import java.util.List;
 
 import gan.keepsafe.R;
 import gan.keepsafe.bean.AppInfo;
-import gan.keepsafe.engine.AppInfos;
+import gan.keepsafe.engine.AppInfosParser;
 
 public class AtyAppManager extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,7 +57,7 @@ public class AtyAppManager extends AppCompatActivity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mAppinfos = AppInfos.getAppInfos(AtyAppManager.this);
+                mAppinfos = AppInfosParser.getAppInfos(AtyAppManager.this);
                 mUserInfos = new ArrayList<AppInfo>();
                 mSysInfos = new ArrayList<AppInfo>();
                 for (AppInfo appInfo : mAppinfos) {
@@ -204,6 +204,8 @@ public class AtyAppManager extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
+    //特殊样式的ListView的Adapter
 
     private class AppManageAdapter extends BaseAdapter {
         @Override

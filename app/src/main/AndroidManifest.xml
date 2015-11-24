@@ -15,8 +15,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
-    <!-- 添加桌面快捷方式需要这个权限-->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <!-- 添加桌面快捷方式需要这个权限 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +28,8 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -139,9 +140,12 @@
         </activity>
         <activity
             android:name=".atys.AtyInputPhoneNum"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-
-            android:label="@string/title_activity_aty_input_phone_num" >
+            android:label="@string/title_activity_aty_input_phone_num"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".atys.AtyTaskManager"
+            android:label="@string/title_activity_aty_task_manager" >
         </activity>
     </application>
 

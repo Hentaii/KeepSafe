@@ -236,21 +236,25 @@ public class AtyGuide extends AppCompatActivity {
         }).start();
 
     }
-        public void createShortCut(Context context){
-            final Intent addIntent = new Intent(
-                    "com.android.launcher.action.INSTALL_SHORTCUT");
-            //final Parcelable icon = Intent.ShortcutIconResource.fromContext(
-              //      context, context.getApplicationInfo().icon); // 获取快捷键的图标
-            addIntent.putExtra("duplicate", false);
-            final Intent myIntent = new Intent(context,
-                    AtyGuide.class);
-            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
-                    context.getApplicationInfo().name);// 快捷方式的标题
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, context.getApplicationInfo().icon);// 快捷方式的图标
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, myIntent);// 快捷方式的动作
-            context.sendBroadcast(addIntent);
-        }
+
+    public void createShortCut(Context context) {
+        final Intent addIntent = new Intent(
+                "com.android.launcher.action.INSTALL_SHORTCUT");
+        //final Parcelable icon = Intent.ShortcutIconResource.fromContext(
+        //      context, context.getApplicationInfo().icon); // 获取快捷键的图标
+//      如果为ture，可重复创建快捷图标
+        addIntent.putExtra("duplicate", false);
+        final Intent myIntent = new Intent(context,
+                AtyGuide.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+                context.getApplicationInfo().name);// 快捷方式的标题
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, context.getApplicationInfo()
+                .icon);// 快捷方式的图标
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, myIntent);// 快捷方式的动作
+        context.sendBroadcast(addIntent);
+    }
+
     static class MyHandler extends Handler {
         WeakReference<AtyGuide> mActivity;
 
@@ -272,17 +276,20 @@ public class AtyGuide extends AppCompatActivity {
                     break;
                 }
                 case MyConfig.JSON_ERROR: {
-                    Toast.makeText(theActivity.getApplicationContext(), "Json has wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(theActivity.getApplicationContext(), "Json has wrong", Toast
+                            .LENGTH_LONG).show();
                     theActivity.enterHome();
                     break;
                 }
                 case MyConfig.URL_ERROR: {
-                    Toast.makeText(theActivity.getApplicationContext(), "URL has wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(theActivity.getApplicationContext(), "URL has wrong", Toast
+                            .LENGTH_LONG).show();
                     theActivity.enterHome();
                     break;
                 }
                 case MyConfig.NET_ERROR: {
-                    Toast.makeText(theActivity.getApplicationContext(), "Net has wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(theActivity.getApplicationContext(), "Net has wrong", Toast
+                            .LENGTH_LONG).show();
                     theActivity.enterHome();
                     break;
                 }
@@ -294,7 +301,7 @@ public class AtyGuide extends AppCompatActivity {
     public void copyDB(String name) {
         File file = new File(getFilesDir(), name);
         if (file.exists()) {
-            Log.d("LOG","已经存在");
+            Log.d("LOG", "已经存在");
             return;
         }
         InputStream in = null;
