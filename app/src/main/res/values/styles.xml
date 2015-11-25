@@ -12,7 +12,9 @@
         <item name="android:background">#B4CDCD</item>
     </style>
 
-
+    <style name="CustomCheckboxTheme" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/btn_green_selector</item>
+    </style>
     <style name="ContentTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

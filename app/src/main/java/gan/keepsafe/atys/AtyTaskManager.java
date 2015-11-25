@@ -27,6 +27,7 @@ import gan.keepsafe.R;
 import gan.keepsafe.bean.AppInfo;
 import gan.keepsafe.bean.TaskInfo;
 import gan.keepsafe.engine.TaskInfoParser;
+import gan.keepsafe.utils.SharedPreferencesUtils;
 import gan.keepsafe.utils.SystemInfoUtils;
 import gan.keepsafe.utils.UIUtils;
 
@@ -51,6 +52,12 @@ public class AtyTaskManager extends AppCompatActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initUI();
+        initData();
+    }
 
     private void initUI() {
         mTvProcessCount = (TextView) findViewById(R.id.tv_task_process_count);
@@ -70,6 +77,11 @@ public class AtyTaskManager extends AppCompatActivity {
                     TaskInfo taskInfo;
                     ViewHolder holder = (ViewHolder) view.getTag();
                     taskInfo = (TaskInfo) object;
+                    //防止将自身进程清除
+                    if (taskInfo.getPackageName().equals(getPackageName())) {
+                        return;
+                    }
+
                     if (taskInfo.isChecked()) {
                         taskInfo.setChecked(false);
                         holder.mCbStatus.setChecked(false);
@@ -103,7 +115,19 @@ public class AtyTaskManager extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return infos.size() + 2;
+
+            /*
+             * 判断当前用户是否需要展示系统进程
+             * 如果需要就全部展示
+             * 如果不需要就展示用户进程
+             */
+            boolean result = SharedPreferencesUtils.getBoolean(AtyTaskManager.this,
+                    "is_show_system", false);
+            if (result) {
+                return mUserInfos.size() + 1 + mSysInfos.size() + 1;
+            } else {
+                return mUserInfos.size() + 1;
+            }
         }
 
         @Override
@@ -165,8 +189,8 @@ public class AtyTaskManager extends AppCompatActivity {
                 taskInfo = mUserInfos.get(position - 1);
             } else {
                 int location = position - 1 - mUserInfos.size() - 1;
-                Log.d("Log","position==========>"+position);
-                Log.d("Log","location==========>"+location);
+                Log.d("Log", "position==========>" + position);
+                Log.d("Log", "location==========>" + location);
                 taskInfo = mSysInfos.get(location);
             }
 
@@ -296,7 +320,7 @@ public class AtyTaskManager extends AppCompatActivity {
     //设置
 
     public void setting(View view) {
-        Intent intent = new Intent(AtyTaskManager.this,AtyTaskManagerSetting.class);
+        Intent intent = new Intent(AtyTaskManager.this, AtyTaskManagerSetting.class);
         startActivity(intent);
     }
 }

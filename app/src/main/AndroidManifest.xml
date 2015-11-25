@@ -152,6 +152,12 @@
             android:name=".atys.AtyTaskManagerSetting"
             android:label="@string/title_activity_aty_task_manager_setting" >
         </activity>
+
+        <service
+            android:name=".srv.SrvKillProcess"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

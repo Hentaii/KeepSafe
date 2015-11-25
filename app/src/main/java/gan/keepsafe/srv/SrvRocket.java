@@ -65,7 +65,7 @@ public class SrvRocket extends Service {
         view = View.inflate(this, R.layout.toast_rocket, null);
         mIvRocket = (ImageView) view.findViewById(R.id.iv_rocket);
         mIvRocket.setBackgroundResource(R.drawable.anim_rocket);
-        AnimationDrawable anim  = (AnimationDrawable) mIvRocket.getBackground();
+        AnimationDrawable anim = (AnimationDrawable) mIvRocket.getBackground();
         anim.start();
         mWM.addView(view, params);
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -133,8 +133,8 @@ public class SrvRocket extends Service {
     };
 
     private void sendRocket() {
-        params.x = width/2-view.getWidth()/2;
-        mWM.updateViewLayout(view,params);
+        params.x = width / 2 - view.getWidth() / 2;
+        mWM.updateViewLayout(view, params);
         new Thread(new Runnable() {
             @Override
             public void run() {

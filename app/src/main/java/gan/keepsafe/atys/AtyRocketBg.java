@@ -25,8 +25,8 @@ public class AtyRocketBg extends Activity {
     private ImageView mIvTop;
     private ImageView mIvBottom;
     private List<TaskInfo> infos;
-    private List<TaskInfo> mUserInfos;
-    private List<TaskInfo> mSysInfos;
+//    private List<TaskInfo> mUserInfos;
+//    private List<TaskInfo> mSysInfos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,6 @@ public class AtyRocketBg extends Activity {
 
         mIvTop.startAnimation(anim);
         mIvBottom.startAnimation(anim);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -52,63 +51,64 @@ public class AtyRocketBg extends Activity {
 
     public void initDate() {
         infos = TaskInfoParser.getTaskInfos(this);
-        mUserInfos = new ArrayList<>();
-        mSysInfos = new ArrayList<>();
-        for (TaskInfo taskInfo : infos) {
-            if (taskInfo.isUserApp()) {
-                mUserInfos.add(taskInfo);
-            } else {
-                mSysInfos.add(taskInfo);
-            }
-        }
-        clean();
+        SystemInfoUtils.cleanMem(AtyRocketBg.this,infos);
     }
 
     // 清理进程
-    public void clean() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        List<TaskInfo> killInfos = new ArrayList<TaskInfo>();
-        //清理的内存总数
-        int totalCount = 0;
-        //释放的总内存
-        int killMem = 0;
-        for (TaskInfo taskInfo : mUserInfos) {
-
-            killInfos.add(taskInfo);
-            totalCount++;
-            killMem += taskInfo.getMemorySize();
-
-        }
-        for (TaskInfo taskInfo : mSysInfos) {
-
-            killInfos.add(taskInfo);
-            totalCount++;
-            killMem += taskInfo.getMemorySize();
-            // 杀死进程 参数表示包名
-            activityManager.killBackgroundProcesses(taskInfo
-                    .getPackageName());
-
-        }
-        for (TaskInfo taskInfo : killInfos) {
-            if (taskInfo.isUserApp()) {
-                mUserInfos.remove(taskInfo);
-                infos.remove(taskInfo);
-                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
-            } else {
-                mSysInfos.remove(taskInfo);
-                infos.remove(taskInfo);
-                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
-            }
-        }
-        UIUtils.showToast(
-                AtyRocketBg.this,
-                "共清理"
-                        + totalCount
-                        + "个进程,释放"
-                        + Formatter.formatFileSize(AtyRocketBg.this,
-                        killMem) + "内存");
-
-    }
+//    public void clean() {
+//        List<TaskInfo> mUserInfos = new ArrayList<>();
+//        List<TaskInfo> mSysInfos = new ArrayList<>();
+//        for (TaskInfo taskInfo : infos) {
+//            if (taskInfo.isUserApp()) {
+//                mUserInfos.add(taskInfo);
+//            } else {
+//                mSysInfos.add(taskInfo);
+//            }
+//        }
+//        clean();
+//        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+//        List<TaskInfo> killInfos = new ArrayList<TaskInfo>();
+//        //清理的内存总数
+//        int totalCount = 0;
+//        //释放的总内存
+//        int killMem = 0;
+//        for (TaskInfo taskInfo : mUserInfos) {
+//
+//            killInfos.add(taskInfo);
+//            totalCount++;
+//            killMem += taskInfo.getMemorySize();
+//
+//        }
+//        for (TaskInfo taskInfo : mSysInfos) {
+//
+//            killInfos.add(taskInfo);
+//            totalCount++;
+//            killMem += taskInfo.getMemorySize();
+//            // 杀死进程 参数表示包名
+//            activityManager.killBackgroundProcesses(taskInfo
+//                    .getPackageName());
+//
+//        }
+//        for (TaskInfo taskInfo : killInfos) {
+//            if (taskInfo.isUserApp()) {
+//                mUserInfos.remove(taskInfo);
+//                infos.remove(taskInfo);
+//                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+//            } else {
+//                mSysInfos.remove(taskInfo);
+//                infos.remove(taskInfo);
+//                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+//            }
+//        }
+//        UIUtils.showToast(
+//                AtyRocketBg.this,
+//                "共清理"
+//                        + totalCount
+//                        + "个进程,释放"
+//                        + Formatter.formatFileSize(AtyRocketBg.this,
+//                        killMem) + "内存");
+//
+//    }
 
 
 }

@@ -1,14 +1,20 @@
 package gan.keepsafe.utils;
 
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.text.format.Formatter;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
+
+import gan.keepsafe.atys.AtyRocketBg;
+import gan.keepsafe.bean.TaskInfo;
 
 public class SystemInfoUtils {
 
@@ -67,6 +73,61 @@ public class SystemInfoUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    // 清理进程
+    public static void cleanMem(Context context,List<TaskInfo> infos) {
+        List<TaskInfo> mUserInfos = new ArrayList<>();
+        List<TaskInfo> mSysInfos = new ArrayList<>();
+        for (TaskInfo taskInfo : infos) {
+            if (taskInfo.isUserApp()) {
+                mUserInfos.add(taskInfo);
+            } else {
+                mSysInfos.add(taskInfo);
+            }
+        }
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<TaskInfo> killInfos = new ArrayList<TaskInfo>();
+        //清理的内存总数
+        int totalCount = 0;
+        //释放的总内存
+        int killMem = 0;
+        for (TaskInfo taskInfo : mUserInfos) {
+
+            killInfos.add(taskInfo);
+            totalCount++;
+            killMem += taskInfo.getMemorySize();
+
+        }
+        for (TaskInfo taskInfo : mSysInfos) {
+
+            killInfos.add(taskInfo);
+            totalCount++;
+            killMem += taskInfo.getMemorySize();
+            // 杀死进程 参数表示包名
+            activityManager.killBackgroundProcesses(taskInfo
+                    .getPackageName());
+
+        }
+        for (TaskInfo taskInfo : killInfos) {
+            if (taskInfo.isUserApp()) {
+                mUserInfos.remove(taskInfo);
+                infos.remove(taskInfo);
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+            } else {
+                mSysInfos.remove(taskInfo);
+                infos.remove(taskInfo);
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+            }
+        }
+        UIUtils.showToast(
+                (Activity)context,
+                "共清理"
+                        + totalCount
+                        + "个进程,释放"
+                        + Formatter.formatFileSize(context,
+                        killMem) + "内存");
+
     }
 
 }
