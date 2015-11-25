@@ -42,4 +42,5 @@
     <string name="title_activity_aty_app_manager">AtyAppManager</string>
     <string name="title_activity_aty_input_phone_num">AtyInputPhoneNum</string>
     <string name="title_activity_aty_task_manager">AtyTaskManager</string>
+    <string name="title_activity_aty_task_manager_setting">AtyTaskManagerSetting</string>
 </resources>

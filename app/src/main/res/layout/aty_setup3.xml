@@ -27,7 +27,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_press_selector"
+        android:background="@drawable/tv_press_selector"
         android:text="请选择联系人"
         android:onClick="ChoseContact"/>
 

@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_press_selector"
+        android:background="@drawable/tv_press_selector"
         android:clickable="true"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:drawablePadding="3dp"
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_press_selector"
+        android:background="@drawable/tv_press_selector"
         android:clickable="true"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:drawablePadding="3dp"
@@ -44,7 +44,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_press_selector"
+        android:background="@drawable/tv_press_selector"
         android:clickable="true"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:drawablePadding="3dp"

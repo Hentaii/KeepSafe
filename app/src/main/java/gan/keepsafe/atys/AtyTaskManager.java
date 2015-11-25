@@ -1,14 +1,18 @@
 package gan.keepsafe.atys;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -24,11 +28,12 @@ import gan.keepsafe.bean.AppInfo;
 import gan.keepsafe.bean.TaskInfo;
 import gan.keepsafe.engine.TaskInfoParser;
 import gan.keepsafe.utils.SystemInfoUtils;
+import gan.keepsafe.utils.UIUtils;
 
 public class AtyTaskManager extends AppCompatActivity {
     private TextView mTvProcessCount;
     private TextView mTvMemory;
-    private ListView mLvApp;
+    private ListView mLvTask;
 
     private List<TaskInfo> infos;
     private List<TaskInfo> mUserInfos;
@@ -36,6 +41,7 @@ public class AtyTaskManager extends AppCompatActivity {
     private int processCount;
     private long availMem;
     private long totalMem;
+    private MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +55,32 @@ public class AtyTaskManager extends AppCompatActivity {
     private void initUI() {
         mTvProcessCount = (TextView) findViewById(R.id.tv_task_process_count);
         mTvMemory = (TextView) findViewById(R.id.tv_task_memory);
-        mLvApp = (ListView) findViewById(R.id.list_view);
+        mLvTask = (ListView) findViewById(R.id.list_view);
         processCount = SystemInfoUtils.getProcessCount(AtyTaskManager.this);
         availMem = SystemInfoUtils.getAvailMem(AtyTaskManager.this);
         totalMem = SystemInfoUtils.getTotalMem(AtyTaskManager.this);
         mTvProcessCount.setText("运行中进程" + processCount + "个");
         mTvMemory.setText("剩余/总内存:" + Formatter.formatFileSize(AtyTaskManager.this, availMem) +
                 "/" + Formatter.formatFileSize(AtyTaskManager.this, totalMem));
+        mLvTask.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object object = mLvTask.getItemAtPosition(position);
+                if (object != null && object instanceof TaskInfo) {
+                    TaskInfo taskInfo;
+                    ViewHolder holder = (ViewHolder) view.getTag();
+                    taskInfo = (TaskInfo) object;
+                    if (taskInfo.isChecked()) {
+                        taskInfo.setChecked(false);
+                        holder.mCbStatus.setChecked(false);
+                    } else {
+                        taskInfo.setChecked(true);
+                        holder.mCbStatus.setChecked(true);
+                    }
+                }
+
+            }
+        });
 
     }
 
@@ -70,8 +95,8 @@ public class AtyTaskManager extends AppCompatActivity {
                 mSysInfos.add(taskInfo);
             }
         }
-        MyAdapter adapter = new MyAdapter();
-        mLvApp.setAdapter(adapter);
+        adapter = new MyAdapter();
+        mLvTask.setAdapter(adapter);
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -93,7 +118,8 @@ public class AtyTaskManager extends AppCompatActivity {
             if (position < mUserInfos.size() + 1) {
                 taskInfo = mUserInfos.get(position - 1);
             } else {
-                taskInfo = mSysInfos.get(position - 2 - mUserInfos.size());
+                int location = position - 1 - mUserInfos.size() - 1;
+                taskInfo = mSysInfos.get(location);
             }
             return taskInfo;
         }
@@ -106,6 +132,7 @@ public class AtyTaskManager extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position == 0) {
+                // 第0个位置显示的应该是 用户程序的个数的标签。
                 TextView textView = new TextView(AtyTaskManager.this);
                 textView.setText("用户进程(" + mUserInfos.size() + ")");
                 textView.setTextColor(Color.WHITE);
@@ -137,8 +164,10 @@ public class AtyTaskManager extends AppCompatActivity {
             if (position < mUserInfos.size() + 1) {
                 taskInfo = mUserInfos.get(position - 1);
             } else {
-                int location = mUserInfos.size() + 2;
-                taskInfo = mSysInfos.get(position - location);
+                int location = position - 1 - mUserInfos.size() - 1;
+                Log.d("Log","position==========>"+position);
+                Log.d("Log","location==========>"+location);
+                taskInfo = mSysInfos.get(location);
             }
 
             mHolder.mIcon.setImageDrawable(taskInfo.getIcon());
@@ -147,10 +176,16 @@ public class AtyTaskManager extends AppCompatActivity {
                     taskInfo.getMemorySize()));
 
 
-            if (taskInfo.isChecked()){
+            if (taskInfo.isChecked()) {
                 mHolder.mCbStatus.setChecked(true);
-            }else {
+            } else {
                 mHolder.mCbStatus.setChecked(false);
+            }
+            //判断当前展示的item是否是自己的程序。如果是。就把程序给隐藏
+            if (taskInfo.getPackageName().equals(getPackageName())) {
+                mHolder.mCbStatus.setVisibility(View.INVISIBLE);
+            } else {
+                mHolder.mCbStatus.setVisibility(View.VISIBLE);
             }
 
             return view;
@@ -165,4 +200,103 @@ public class AtyTaskManager extends AppCompatActivity {
         CheckBox mCbStatus;
     }
 
+
+    //    全选进程
+    public void choseAll(View view) {
+
+        for (TaskInfo taskInfo : mUserInfos) {
+            // 判断当前的用户程序是不是自己的程序。如果是自己的程序。那么就把文本框隐藏
+            if (taskInfo.getPackageName().equals(getPackageName())) {
+                continue;
+            }
+            taskInfo.setChecked(true);
+        }
+        for (TaskInfo taskInfo : mSysInfos) {
+            taskInfo.setChecked(true);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    //    反选进程
+    public void opposeChose(View view) {
+        for (TaskInfo taskInfo : mUserInfos) {
+            if (taskInfo.isChecked()) {
+                // 判断当前的用户程序是不是自己的程序。如果是自己的程序。那么就把文本框隐藏
+                if (taskInfo.getPackageName().equals(getPackageName())) {
+                    continue;
+                }
+                taskInfo.setChecked(false);
+            } else {
+                taskInfo.setChecked(true);
+            }
+        }
+        for (TaskInfo taskInfo : mSysInfos) {
+            if (taskInfo.isChecked()) {
+                taskInfo.setChecked(false);
+            } else {
+                taskInfo.setChecked(true);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    // 清理进程
+    public void clean(View view) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<TaskInfo> killInfos = new ArrayList<TaskInfo>();
+        //清理的内存总数
+        int totalCount = 0;
+        //释放的总内存
+        int killMem = 0;
+        for (TaskInfo taskInfo : mUserInfos) {
+            if (taskInfo.isChecked()) {
+                killInfos.add(taskInfo);
+                totalCount++;
+                killMem += taskInfo.getMemorySize();
+            }
+        }
+        for (TaskInfo taskInfo : mSysInfos) {
+            if (taskInfo.isChecked()) {
+                killInfos.add(taskInfo);
+                totalCount++;
+                killMem += taskInfo.getMemorySize();
+                // 杀死进程 参数表示包名
+                activityManager.killBackgroundProcesses(taskInfo
+                        .getPackageName());
+            }
+        }
+        for (TaskInfo taskInfo : killInfos) {
+            if (taskInfo.isUserApp()) {
+                mUserInfos.remove(taskInfo);
+                infos.remove(taskInfo);
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+            } else {
+                mSysInfos.remove(taskInfo);
+                infos.remove(taskInfo);
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+            }
+        }
+        UIUtils.showToast(
+                AtyTaskManager.this,
+                "共清理"
+                        + totalCount
+                        + "个进程,释放"
+                        + Formatter.formatFileSize(AtyTaskManager.this,
+                        killMem) + "内存");
+
+        processCount -= totalCount;
+        availMem += killMem;
+        mTvProcessCount.setText("运行中进程" + processCount + "个");
+        mTvMemory.setText("剩余/总内存:" + Formatter.formatFileSize(AtyTaskManager.this, availMem) +
+                "/" + Formatter.formatFileSize(AtyTaskManager.this, totalMem));
+
+        adapter.notifyDataSetChanged();
+    }
+
+    //设置
+
+    public void setting(View view) {
+        Intent intent = new Intent(AtyTaskManager.this,AtyTaskManagerSetting.class);
+        startActivity(intent);
+    }
 }
