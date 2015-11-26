@@ -76,7 +76,7 @@ public class SystemInfoUtils {
     }
 
     // 清理进程
-    public static void cleanMem(Context context,List<TaskInfo> infos) {
+    public static String cleanMem(Context context,List<TaskInfo> infos) {
         List<TaskInfo> mUserInfos = new ArrayList<>();
         List<TaskInfo> mSysInfos = new ArrayList<>();
         for (TaskInfo taskInfo : infos) {
@@ -120,13 +120,18 @@ public class SystemInfoUtils {
                 activityManager.killBackgroundProcesses(taskInfo.getPackageName());
             }
         }
-        UIUtils.showToast(
-                (Activity)context,
-                "共清理"
-                        + totalCount
-                        + "个进程,释放"
-                        + Formatter.formatFileSize(context,
-                        killMem) + "内存");
+        return "共清理"
+                + totalCount
+                + "个进程,释放"
+                + Formatter.formatFileSize(context,
+                killMem) + "内存";
+//        UIUtils.showToast(
+//                (Activity)context,
+//                "共清理"
+//                        + totalCount
+//                        + "个进程,释放"
+//                        + Formatter.formatFileSize(context,
+//                        killMem) + "内存");
 
     }
 

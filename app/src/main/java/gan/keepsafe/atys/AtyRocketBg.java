@@ -51,7 +51,7 @@ public class AtyRocketBg extends Activity {
 
     public void initDate() {
         infos = TaskInfoParser.getTaskInfos(this);
-        SystemInfoUtils.cleanMem(AtyRocketBg.this,infos);
+        UIUtils.showToast(AtyRocketBg.this,SystemInfoUtils.cleanMem(AtyRocketBg.this, infos));
     }
 
     // 清理进程
