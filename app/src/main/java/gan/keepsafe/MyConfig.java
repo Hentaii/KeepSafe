@@ -4,6 +4,8 @@ package gan.keepsafe;
 public class MyConfig {
     public static final String NAMESPACE = "http://schemas.android.com/apk/res-auto";
     public static final String JSON_URL = "http://113.251.171.224:8080/update.json";
+    public static final String JSON_VIR_URL = "http://113.251.171.224:8080/update.json";
+
 
     public static final int UPDATE_DIALOG = 1;
     public static final int ENTER_HOME = 2;
@@ -24,6 +26,10 @@ public class MyConfig {
     public static final int MODE_PHONE_AND_SMS = 1;
     public static final int MODE_PHONE = 2;
     public static final int MODE_SMS = 3;
+
+    public static final int HANDLE_START = 0;
+    public static final int HANDLE_SCAN = 1;
+    public static final int HANDLE_END = 2;
 
 
 

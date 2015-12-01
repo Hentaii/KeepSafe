@@ -53,6 +53,18 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="AtoolsStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/tv_press_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:drawableLeft">@android:drawable/ic_menu_camera</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
     <style name="widget_text">
         <item name="android:textSize">16.0dip</item>
         <item name="android:textColor">@color/textColorPrimaryDark</item>

@@ -69,6 +69,10 @@ public class AtyHome extends AppCompatActivity {
                         startActivity(new Intent(AtyHome.this,AtyTaskManager.class));
                         break;
                     }
+                    case MyConfig.HOME_TROJAN:{
+                        startActivity(new Intent(AtyHome.this,AtyAntiVirusa.class));
+                        break;
+                    }
                     case MyConfig.HOME_TOOLS: {
                         startActivity(new Intent(AtyHome.this, AtyAtools.class));
                         break;

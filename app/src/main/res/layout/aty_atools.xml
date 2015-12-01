@@ -8,31 +8,16 @@
         android:text="高级工具"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_press_selector"
-        android:clickable="true"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:drawablePadding="3dp"
+        style="@style/AtoolsStyle"
         android:onClick="numAddQuery"
-        android:padding="10dp"
         android:text="号码归属地查询"
-        android:textColor="#000"
-        android:textSize="28sp"
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_press_selector"
-        android:clickable="true"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:drawablePadding="3dp"
+        style="@style/AtoolsStyle"
         android:onClick="backUp"
-        android:padding="10dp"
         android:text="短信备份"
-        android:textColor="#000"
-        android:textSize="28sp"
+
         />
 
     <ProgressBar
@@ -42,17 +27,17 @@
         style="?android:attr/progressBarStyleHorizontal"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_press_selector"
-        android:clickable="true"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:drawablePadding="3dp"
+        style="@style/AtoolsStyle"
         android:onClick="setShortCut"
-        android:padding="10dp"
         android:text="建立联系人快捷方式"
-        android:textColor="#000"
-        android:textSize="28sp"
         />
+
+    <TextView
+        style="@style/AtoolsStyle"
+        android:onClick="setLock"
+        android:text="设置程序锁"
+        />
+
+
 
 </LinearLayout>

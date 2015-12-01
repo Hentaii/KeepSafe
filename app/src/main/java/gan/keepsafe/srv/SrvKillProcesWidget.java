@@ -19,6 +19,8 @@ import gan.keepsafe.utils.SystemInfoUtils;
 public class SrvKillProcesWidget extends Service {
 
     private AppWidgetManager manager;
+    private Timer timer;
+    private TimerTask timerTask;
 
     public SrvKillProcesWidget() {
     }
@@ -32,7 +34,7 @@ public class SrvKillProcesWidget extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Timer timer = new Timer();
+        timer = new Timer();
         manager = AppWidgetManager.getInstance(this);
         final ComponentName provider = new ComponentName(getApplicationContext(),
                 ReceiverAppWidget.class);
@@ -41,7 +43,7 @@ public class SrvKillProcesWidget extends Service {
          * Remote 远程
          */
         final RemoteViews views = new RemoteViews(getPackageName(), R.layout.process_widget);
-        TimerTask timerTask = new TimerTask() {
+        timerTask = new TimerTask() {
             @Override
             public void run() {
                 /*
@@ -50,7 +52,8 @@ public class SrvKillProcesWidget extends Service {
                  */
                 int processCount = SystemInfoUtils.getProcessCount(getApplicationContext());
                 //设置文本
-                views.setTextViewText(R.id.process_count,"正在运行的软件:" + String.valueOf(processCount));
+                views.setTextViewText(R.id.process_count, "正在运行的软件:" + String.valueOf
+                        (processCount));
                 //获取到当前手机上面的可用内存
                 long availMem = SystemInfoUtils.getAvailMem(getApplicationContext());
 
@@ -61,8 +64,8 @@ public class SrvKillProcesWidget extends Service {
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
                         intent, 0);
 
-                views.setOnClickPendingIntent(R.id.btn_clear,pendingIntent);
-                manager.updateAppWidget(provider,views);
+                views.setOnClickPendingIntent(R.id.btn_clear, pendingIntent);
+                manager.updateAppWidget(provider, views);
             }
         };
         timer.schedule(timerTask, 0, 3000);
@@ -72,5 +75,13 @@ public class SrvKillProcesWidget extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
     }
 }

@@ -29,6 +29,9 @@ public class AtyAtools extends Activity {
     public void numAddQuery(View view) {
         startActivity(new Intent(AtyAtools.this, AtyAddress.class));
     }
+    public void setLock(View view){
+        startActivity(new Intent(AtyAtools.this,AtyAppLock.class));
+    }
 
     //短信备份
     public void backUp(View view) {

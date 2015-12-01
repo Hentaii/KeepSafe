@@ -25,6 +25,7 @@ import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +41,7 @@ import java.net.URL;
 
 import gan.keepsafe.MyConfig;
 import gan.keepsafe.R;
+import gan.keepsafe.db.AntivirusDao;
 import gan.keepsafe.srv.SrvLocation;
 import gan.keepsafe.srv.SrvRocket;
 import gan.keepsafe.utils.StreamUtils;
@@ -55,6 +57,7 @@ public class AtyGuide extends AppCompatActivity {
     private String mDescription;
     private String mDownloadUrl;
     private AlertDialog.Builder builder;
+    private AntivirusDao dao;
 
 
     @Override
@@ -68,6 +71,8 @@ public class AtyGuide extends AppCompatActivity {
         mTvVersion.append(getVersionName());
         mSpref = getSharedPreferences("config", MODE_PRIVATE);
         copyDB("address.db");
+        copyDB("antivirus.db");
+        updataVirus();
         boolean state = mSpref.getBoolean("auto_update", true);
         if (state) {
             cheakVersion();
@@ -236,7 +241,41 @@ public class AtyGuide extends AppCompatActivity {
         }).start();
 
     }
+//更新病毒库
+    private void updataVirus(){
+        dao = new AntivirusDao();
+        HttpUtils httpUtils = new HttpUtils();
+        String url = MyConfig.JSON_VIR_URL;
+        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+//                    Virus virus = gson.fromJson(arg0.result, Virus.class);
+					String md5 = jsonObject.getString("md5");
 
+					String desc = jsonObject.getString("desc");
+
+//                    dao.addVirus(virus.md5, virus.desc);
+                    dao.addVirus(md5,desc);
+                    Log.d("Log","更新病毒库成功");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
+
+
+    }
+
+
+//创建快捷方式
     public void createShortCut(Context context) {
         final Intent addIntent = new Intent(
                 "com.android.launcher.action.INSTALL_SHORTCUT");

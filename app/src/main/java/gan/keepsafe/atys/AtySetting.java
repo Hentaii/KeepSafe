@@ -39,7 +39,13 @@ public class AtySetting extends AppCompatActivity {
         initAddressLocation();
         initRocket();
         initBlackView();
+        initLock();
     }
+
+    private void initLock() {
+
+    }
+
 
     private void initRocket() {
         mSiv_rocket = (SettingItemView) findViewById(R.id.siv_rocket);
